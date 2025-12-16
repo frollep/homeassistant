@@ -1,0 +1,25 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tibber Pulse-token",
+        "description": "Ange Tibber API-token för att lista hem.",
+        "data": {
+          "token": "Tibber API-token"
+        }
+      },
+      "home": {
+        "title": "Välj hem",
+        "description": "Välj vilket Tibber-hem som ska övervakas.",
+        "data": {
+          "home_id": "Hem"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Ogiltig token eller åtkomst nekad.",
+      "cannot_connect": "Kunde inte ansluta till Tibber API.",
+      "no_homes": "Inga hem hittades för kontot."
+    }
+  }
+}

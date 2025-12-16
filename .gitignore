@@ -2,6 +2,13 @@
 config/.storage/
 config/*.db
 config/*.log
+config/*.db-*
+config/home-assistant.log*
+config/home-assistant_v2.db*
+config/.HA_VERSION
+config/.ha_run.lock
+config/tts/
+config/blueprints/
 config/backups/
 config/secrets.yaml
 __pycache__/

@@ -1,0 +1,49 @@
+title: Tibber Pulse P1
+views:
+  - title: Phase Overview
+    path: tibber-pulse-p1
+    cards:
+      - type: markdown
+        content: |
+          # Tibber Pulse P1
+          Example dashboard showing per-phase power, voltage, and current.
+      - type: entities
+        title: Totals
+        entities:
+          - entity: sensor.tibber_pulse_p1_power_total
+            name: Power total
+          - entity: sensor.tibber_pulse_p1_energy_imported
+            name: Energy imported
+          - entity: sensor.tibber_pulse_p1_energy_exported
+            name: Energy exported
+      - type: history-graph
+        title: Phase Power (W)
+        hours_to_show: 24
+        entities:
+          - sensor.tibber_pulse_p1_power_l1
+          - sensor.tibber_pulse_p1_power_l2
+          - sensor.tibber_pulse_p1_power_l3
+      - type: history-graph
+        title: Voltage (V)
+        hours_to_show: 24
+        entities:
+          - sensor.tibber_pulse_p1_voltage_l1
+          - sensor.tibber_pulse_p1_voltage_l2
+          - sensor.tibber_pulse_p1_voltage_l3
+      - type: history-graph
+        title: Current (A)
+        hours_to_show: 24
+        entities:
+          - sensor.tibber_pulse_p1_current_l1
+          - sensor.tibber_pulse_p1_current_l2
+          - sensor.tibber_pulse_p1_current_l3
+      - type: glance
+        title: Other metrics
+        show_name: true
+        entities:
+          - entity: sensor.tibber_pulse_p1_power_factor
+            name: Power factor
+          - entity: sensor.tibber_pulse_p1_frequency
+            name: Frequency
+          - entity: sensor.tibber_pulse_p1_device_temperature
+            name: Device temp
