@@ -1,4 +1,7 @@
 .env
-*.log
-.storage/
+config/.storage/
+config/*.db
+config/*.log
+config/backups/
+config/secrets.yaml
 __pycache__/
