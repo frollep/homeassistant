@@ -1,0 +1,633 @@
+openapi: 3.1.1
+info:
+  title: Tibber Data API
+  contact:
+    name: Tibber
+    url: https://www.tibber.com
+    email: support@tibber.com
+  version: 1.0.0
+servers:
+  - url: https://data-api.tibber.com/
+    description: Tibber Data API - production
+paths:
+  /v1/homes:
+    get:
+      tags:
+        - HomeEndpoints
+      summary: get homes
+      description: Retrieve all homes for the user. Note that if you have contacted
+        support to hide a home, it will not appear in this list
+      operationId: GetHomes
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HomeListResponse"
+        "500":
+          description: Internal Server Error
+  /v1/homes/{homeId}/devices:
+    get:
+      tags:
+        - DeviceEndpoints
+      summary: get devices
+      description: Retrieve all active devices paired to a home. Devices that are
+        considered roaming, such as electric vehicles, are included under all
+        the user's homes
+      operationId: GetDevicesForHome
+      parameters:
+        - name: homeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceListResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/homes/{homeId}/devices/{deviceId}:
+    get:
+      tags:
+        - DeviceEndpoints
+      summary: get device
+      description: Retrieve data about a specific device paired to a home
+      operationId: GetDeviceForHomeById
+      parameters:
+        - name: homeId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/homes/{homeId}/devices/{deviceId}/history:
+    get:
+      tags:
+        - DeviceEndpoints
+      summary: get device history
+      description: Retrieve historical data for a specific device paired to a home.
+        The data returned depends on the type of device.
+      operationId: GetDeviceHistory
+      parameters:
+        - name: homeId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          in: query
+          schema:
+            type: string
+        - name: since
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: until
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: resolution
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceHistoryResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "500":
+          description: Internal Server Error
+components:
+  schemas:
+    DeviceHistoryQuery:
+      required:
+        - resolution
+        - effectiveStart
+        - effectiveEnd
+        - pageSize
+      type: object
+      properties:
+        resolution:
+          description: Requested temporal resolution
+          $ref: "#/components/schemas/DeviceHistoryResolution"
+        effectiveStart:
+          type: string
+          description: Start of the time period for the overall query, clamped to
+            retention period start or first available value, whichever is the
+            latest (inclusive)
+          format: date-time
+        effectiveEnd:
+          type: string
+          description: End of the time period for the overall query, clamped to the start
+            of the current temporal unit at query time (exclusive)
+          format: date-time
+        pageSize:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          description: "Maximum number of items returned in a single page. The actual
+            number of items can be lower in cases of: reaching either end of the
+            history, or holes in the data due to outages (at Tibber, at 3rd
+            party, or at the installation site). If this property is zero, that
+            means that you queried future data."
+          format: int32
+      description: "Device history query parameters. `effectiveStart` and
+        `effectiveEnd` define the overall time period for the query, and may be
+        clamped. There are cases when sending in a specific time period will not
+        yield the exact same time period in the response, for example if the
+        requested start is before the retention period start, or if the
+        requested end is in the current temporal unit (month/day/hour, etc.)
+        which is not yet completed. If you request future data, you will receive
+        an empty default response with `pageSize: 0`."
+    DeviceHistoryResolution:
+      enum:
+        - quarterHour
+        - hour
+        - day
+        - month
+    DeviceHistoryResponse:
+      required:
+        - query
+        - items
+      type: object
+      properties:
+        query:
+          description: The criteria used for the overall query
+          $ref: "#/components/schemas/DeviceHistoryQuery"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeviceHistoryResponseData"
+          description: Result items; if empty, there are no data recorded for the given
+            resolution and time period
+        prev:
+          type: string
+          description: Navigation link to the previous records of the overall query. If
+            empty, there is no data back further.
+        next:
+          type: string
+          description: Navigation link to the next records of the overall query. If empty,
+            there are no more records, and you have reached the end.
+    DeviceHistoryResponseData:
+      required:
+        - time
+        - data
+      type: object
+      properties:
+        time:
+          type: string
+          description: The time at which the data values were recorded
+          format: date-time
+        data:
+          type: object
+          description: >-
+            Recorded data values. Unstructured data; the keys depend on the
+            device type, resolution and its capabilities and may contain nested
+            data.
+
+            Thermostats: For daily resolution, this is dynamically aggregated
+            data, and will only contain avg. temperature (usually the room
+            temperature sensor Tibber uses for smart heating control) for the
+            whole day.
+
+            Energy systems: The `storage` time series data is only available for
+            hourly and quarter-hourly resolutions and will be omitted for the
+            remaining resolutions. Also, the different time series data
+            (`energyFlow`, `storage`, `solar`) are fetched individually and
+            stitched together, so there may be holes if some of the underlying
+            data is not available for the requested time period, or if there are
+            transient errors.
+
+            All: A resolution is "closed", as in the whole period needs to be
+            completed for it to be returned. For example, if monthly resolution
+            is requested, the current month will not be returned until it has
+            completed. For "partial" data like this, go down to a finer
+            resolution and aggregate the data manually. This might seem
+            inconvenient, but it is a way to ensure that the data is consistent
+            and records not changing as time progresses.
+      description: Device history data series container
+    DeviceInfoResponse:
+      required:
+        - name
+        - brand
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the device. This might be the name given in an external
+            API, or it might be a best-effort name given by Tibber
+        brand:
+          type: string
+          description: Best-effort make/brand/marque
+        model:
+          type: string
+          description: Optional best-effort model
+      description: Static make/brand/marque/model information about a device
+    DeviceListResponse:
+      required:
+        - devices
+      type: object
+      properties:
+        devices:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+          description: Devices with basic information
+      description: List of devices accessible by the user
+    DeviceResponse:
+      required:
+        - id
+        - externalId
+        - info
+        - supportedHistory
+        - status
+        - attributes
+        - capabilities
+      type: object
+      properties:
+        id:
+          type: string
+          description: Publicly addressable device identifier; only exists in this API
+        externalId:
+          type: string
+          description: External identifier, usually from external third-party API; in the
+            case of Tibber Pulse, this might often be its QR code
+        info:
+          description: Static device info
+          $ref: "#/components/schemas/DeviceInfoResponse"
+        supportedHistory:
+          description: Temporal resolutions supported in the Device History endpoint for
+            this particular device
+          $ref: "#/components/schemas/HistoryInfoResponse"
+        status:
+          description: Last-seen information
+          $ref: "#/components/schemas/DeviceStatus"
+        attributes:
+          type: array
+          items:
+            $ref: "#/components/schemas/IAttribute"
+          description: Seldom changing device properties
+        capabilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/ICapability"
+          description: Loosely categorized device capabilities and their state
+      description: Device details
+    DeviceStatus:
+      type: object
+      properties:
+        lastSeen:
+          type: string
+          description: The point in time Tibber last queried or collected data for the
+            device. ISO 8601/RFC 3339 date/time string normalized to the time
+            zone of the Tibber home to which the device is paired.
+          format: date-time
+      description: Device status information
+    HistoryInfoResponse:
+      required:
+        - resolutions
+      type: object
+      properties:
+        resolutions:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeviceHistoryResolution"
+          description: Temporal resolutions supported in the device history endpoint, if any
+        maxRetentionDays:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          description: The maximum number of days history is retained for the device. This
+            might differ per resolution and only the longest is shown. If
+            missing, this means the retention is undefined (usually indefinite,
+            but no guarantee), or no history is supported.
+          format: int32
+      description: History reporting support for a device
+    HomeListResponse:
+      required:
+        - homes
+      type: object
+      properties:
+        homes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+          description: Home items
+      description: List of homes the user has access to. Note that if you have
+        contacted support to hide a home, it will not appear in this list
+    IAttribute:
+      type: object
+      anyOf:
+        - $ref: "#/components/schemas/IAttributeWifiAttribute"
+        - $ref: "#/components/schemas/IAttributeCellularAttribute"
+        - $ref: "#/components/schemas/IAttributeStringAttribute"
+        - $ref: "#/components/schemas/IAttributeBooleanAttribute"
+        - $ref: "#/components/schemas/IAttributeDateTimeAttribute"
+        - $ref: "#/components/schemas/IAttributeEnumAttribute"
+      discriminator:
+        propertyName: $type
+    IAttributeBooleanAttribute:
+      required:
+        - id
+        - value
+      properties:
+        id:
+          type: string
+          description: variable
+        value:
+          type: boolean
+          description: A true/false value
+      description: Generic boolean attribute
+    IAttributeCellularAttribute:
+      required:
+        - id
+        - status
+      properties:
+        id:
+          type: string
+          description: '"connectivity.cellular"'
+        status:
+          type: string
+          description: Latest seen connection status
+      description: Device cellular connection details
+    IAttributeDateTimeAttribute:
+      required:
+        - id
+        - value
+      properties:
+        id:
+          type: string
+          description: variable
+        value:
+          type: string
+          description: An ISO 8601/RFC 3339 value normalized to the time zone of the
+            Tibber home to which the device is paired
+          format: date-time
+      description: Generic date/time attribute
+    IAttributeEnumAttribute:
+      required:
+        - id
+        - description
+        - value
+        - availableValues
+      properties:
+        id:
+          type: string
+          description: variable
+        description:
+          type: string
+          description: Description of the enumeration
+        value:
+          type: string
+          description: Last seen value
+        availableValues:
+          type: array
+          items:
+            type: string
+          description: Predefined set of possible values
+      description: Generic enumerated attribute; the value is one of a predefined set
+        of strings
+    IAttributeStringAttribute:
+      required:
+        - id
+        - value
+      properties:
+        id:
+          type: string
+          description: variable
+        value:
+          type: string
+          description: A string/textual value
+      description: Generic string attribute
+    IAttributeWifiAttribute:
+      required:
+        - id
+        - status
+      properties:
+        id:
+          type: string
+          description: '"connectivity.wifi"'
+        status:
+          type: string
+          description: Latest seen connection status
+        ssid:
+          type: string
+          description: Latest seen service set identifier
+        bssid:
+          type: string
+          description: Latest seen 48-bit basic service set identifier
+        ipAddress:
+          type: string
+          description: Latest seen assigned IP address (usually IPv4)
+      description: Device Wi-Fi connection details
+    ICapability:
+      type: object
+      anyOf:
+        - $ref: "#/components/schemas/ICapabilityIntegerCapability"
+        - $ref: "#/components/schemas/ICapabilityFloatingPointCapability"
+        - $ref: "#/components/schemas/ICapabilityEnumCapability"
+      discriminator:
+        propertyName: $type
+    ICapabilityEnumCapability:
+      required:
+        - id
+        - description
+        - value
+        - availableValues
+      properties:
+        id:
+          type: string
+          description: variable
+        description:
+          type: string
+          description: Human-readable description of the capability
+        value:
+          type: string
+          description: The last seen value
+        availableValues:
+          type: array
+          items:
+            type: string
+          description: Predefined set of possible values
+      description: Enumerated capability; the value is one of a predefined set of strings
+    ICapabilityFloatingPointCapability:
+      required:
+        - id
+        - description
+        - value
+        - unit
+      properties:
+        id:
+          type: string
+          description: variable
+        description:
+          type: string
+          description: Human-readable description of the capability
+        value:
+          pattern: ^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$
+          type:
+            - number
+            - string
+          description: The last seen value
+          format: double
+        unit:
+          type: string
+          description: Value unit
+      description: Floating-point-valued capability (state value)
+    ICapabilityIntegerCapability:
+      required:
+        - id
+        - description
+        - value
+        - unit
+      properties:
+        id:
+          type: string
+          description: variable
+        description:
+          type: string
+          description: Human-readable description of the capability
+        value:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          description: The last seen value
+          format: int32
+        unit:
+          type: string
+          description: Value unit
+      description: Integer-valued capability (state value)
+    Item:
+      required:
+        - id
+        - externalId
+        - info
+        - supportedHistory
+      type: object
+      properties:
+        id:
+          type: string
+          description: Publicly addressable device identifier; only exists in this API
+        externalId:
+          type: string
+          description: External identifier, usually from external third-party API; in the
+            case of Tibber Pulse, this might often be its QR code
+        info:
+          description: Static device info
+          $ref: "#/components/schemas/DeviceInfoResponse"
+        supportedHistory:
+          description: Temporal resolutions supported in the Device History endpoint for
+            this particular device
+          $ref: "#/components/schemas/HistoryInfoResponse"
+      description: Device item with basic information used for fetching more detailed
+        information or history
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+  securitySchemes:
+    Bearer:
+      type: oauth2
+      description: JWT Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://thewall.tibber.com/connect/authorize
+          tokenUrl: https://thewall.tibber.com/connect/token
+          scopes:
+            openid: Your user identifier
+            profile: Your user profile information (first name, last name, etc)
+            email: Your email address
+            offline_access: Access to your applications and resources, even when you are
+              offline
+            data-api-user-read: Read access to user information
+            data-api-chargers-read: Read access to information on chargers owned by the user
+            data-api-energy-systems-read: Read access to information on energy systems (e.g.
+              batteries, inverters) owned by the user
+            data-api-homes-read: Read access to information on homes owned by the user
+            data-api-thermostats-read: Read access to information on thermostats owned by the user
+            data-api-vehicles-read: Read access to information on vehicles owned by the user
+            data-api-inverters-read: Read access to information on legacy inverters owned by the user
+security:
+  - {}
+tags:
+  - name: HomeEndpoints
+  - name: DeviceEndpoints
