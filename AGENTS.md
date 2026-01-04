@@ -1,35 +1,39 @@
 # Repository Guidelines
 
-This repository tracks a Docker-based Home Assistant setup intended for WSL2. Keep changes small, reviewed, and reproducible so the environment can be rebuilt reliably.
-
 ## Project Structure & Module Organization
-- Root: Docker assets (e.g., `docker-compose.yml`, `.env`) and top-level docs.
-- `config/`: Home Assistant configuration (`configuration.yaml`, `automations/`, `scripts/`, `scenes/`, `custom_components/`). `.storage/` stays ignored and must not be committed.
-- `assets/` or `www/`: Static files for dashboards; keep images optimized.
-- Prefer feature folders under `config/` (e.g., `config/rooms/living_room.yaml`) to keep automation scope clear.
+- `docker-compose.yml` – starts Home Assistant, InfluxDB v2, and Grafana on the same network.
+- `config/` – Home Assistant configuration mounted at `/config`; keep secrets in `.env`, not here.
+- `custom_components/` – Tibber Pulse phases integration; keep entity IDs stable to avoid series churn.
+- `grafana/` – provisioned datasources (`provisioning/`) and JSON dashboards (`dashboards/`).
+- `tools/` – utilities such as `tibber_probe.py`; `Makefile` exposes `make probe`.
+- `examples/`, `docs/`, `tibber/` – reference material and sample configs.
 
 ## Build, Test, and Development Commands
-- `docker compose up -d`: Start Home Assistant and supporting containers.
-- `docker compose logs -f homeassistant`: Stream logs for debugging startup and automations.
-- `docker compose exec homeassistant python -m homeassistant --config /config --script check_config`: Validate configuration without restarting the stack.
-- `docker compose down` (or `down -v` when intentionally resetting volumes): Stop and clean containers.
+- Start stack: `docker compose up -d`
+- Stop stack: `docker compose down`
+- Logs: `docker compose logs -f homeassistant` (or `influxdb`, `grafana`)
+- Probe Tibber API: `cp .env.example .env && make probe` (needs `requests` + `websocket-client`)
+- Verify InfluxDB data: `curl -G http://localhost:8086/query -H "Authorization: Token $INFLUXDB_TOKEN" --data-urlencode 'db=ha_energy' --data-urlencode 'q=SHOW MEASUREMENTS'`
+- Grafana UI: http://localhost:3000 (credentials from `.env`)
 
 ## Coding Style & Naming Conventions
-- YAML: 2-space indentation; avoid tabs. Keep anchors/aliases minimal for readability.
-- Entity IDs and filenames: `lower_snake_case`; automation IDs use `area_action` (e.g., `kitchen_lights_evening`).
-- Secrets live in `.env` or `config/secrets.yaml`; never inline credentials. Use descriptive comments only where intent is non-obvious.
+- YAML (Home Assistant): 2-space indent, lowercase keys, snake_case entity IDs; prefer anchors/`!include` for reuse.
+- Python (tools/integrations): PEP 8, snake_case functions, type hints where helpful; keep external deps minimal.
+- JSON (Grafana): format via Grafana export; no trailing commas; use readable panel titles/units.
+- Docker/compose: explicit versions; keep credentials in `.env`, never hardcode tokens.
 
 ## Testing Guidelines
-- Run `check_config` before commits; ensure new packages/integrations are declared and discoverable.
-- When adding automations or scripts, include a minimal `description` and validate trigger/condition logic via logs.
-- For dashboards, verify mobile and desktop views in the UI and keep assets cached in `www/`.
+- Containers: `docker compose ps` should show running; restart after config changes.
+- Home Assistant: check logs for integration errors; verify Tibber entities update in Developer Tools → States.
+- InfluxDB: confirm bucket `ha_energy` receives points for Tibber entities via `SHOW MEASUREMENTS` or Flux `from(bucket:"ha_energy") |> range(start:-1h)`.
+- Grafana: test the Influx datasource, open the `Tibber Energy & Pulse` dashboard, and confirm panels render for the last hour; widen the time range if data is sparse.
 
 ## Commit & Pull Request Guidelines
-- Commits: short imperative summary (e.g., `Add living room motion automation`), optionally scoped by area (`core`, `lighting`, `media`).
-- Link related issues in the body (`#123`) and note any breaking changes or migration steps.
-- PRs should describe the change, include testing notes (e.g., `check_config`, manual UI checks), and attach screenshots for Lovelace updates when relevant.
+- Commits: short imperative subjects (e.g., `Add Grafana InfluxQL datasource`); include rationale in body when needed.
+- PRs: describe user-facing changes, screenshots of dashboards, linked issues, and required manual steps (e.g., copy `.env`, rotate tokens).
+- Keep changes focused; update docs/dashboards alongside config edits.
 
 ## Security & Configuration Tips
-- Keep API keys, tokens, and coordinates out of tracked files; update `.env.example` when adding new required variables.
-- Review `.storage/` changes locally only; the directory stays untracked to avoid leaking credentials and device metadata.
-- Rotate long-lived tokens periodically and prefer limited-scope keys for third-party services.
+- Copy `.env.example` to `.env` and replace placeholder tokens/passwords; never commit real secrets.
+- Use least-privilege Influx tokens; rotate regularly. Set a strong Grafana admin password.
+- Align entity names before enabling Influx export to avoid duplicate series after renames.

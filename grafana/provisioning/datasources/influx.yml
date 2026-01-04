@@ -1,0 +1,19 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    uid: influxdb-ha
+    type: influxdb
+    access: proxy
+    isDefault: true
+    url: http://influxdb:8086
+    database: ${INFLUXDB_BUCKET}
+    jsonData:
+      version: InfluxQL
+      database: ${INFLUXDB_BUCKET}
+      httpMode: GET
+      tlsSkipVerify: true
+      httpHeaderName1: Authorization
+    secureJsonData:
+      httpHeaderValue1: "Token ${INFLUXDB_TOKEN}"
+    editable: false

@@ -4,3 +4,406 @@ http:
   use_x_forwarded_for: true
   trusted_proxies:
     - 127.0.0.1
+  login_attempts_threshold: -1
+
+auth_providers:
+  - type: homeassistant
+  - type: trusted_networks
+    trusted_networks:
+      - 127.0.0.1
+      - 192.168.68.0/24
+    allow_bypass_login: true
+logger:
+  default: info
+  logs:
+    custom_components.tibber_pulse_p1: debug
+    homeassistant.components.influxdb: debug
+
+influxdb:
+  api_version: 2
+  host: influxdb
+  port: 8086
+  ssl: false
+  verify_ssl: false
+  token: !env_var INFLUXDB_TOKEN
+  organization: !env_var INFLUXDB_ORG
+  bucket: !env_var INFLUXDB_BUCKET
+  tags:
+    source: homeassistant
+  default_measurement: state
+  include:
+    domains:
+      - sensor
+    entity_globs:
+      - sensor.tibber*
+      - sensor.b6559c39*
+      - sensor.*tibber*
+      - sensor.phase_*
+      - sensor.overvoltage*
+      - sensor.*heat_loss*
+      - sensor.neutral*
+      - sensor.total_active_power_sum
+
+template:
+  - sensor:
+      - name: "Tibber Phase Current Imbalance"
+        unique_id: tibber_phase_current_imbalance
+        unit_of_measurement: "A"
+        state: >-
+          {% set l1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set l2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set l3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set values = [l1, l2, l3] %}
+          {{ (values|max - values|min) | round(2) }}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Tibber Phase Current Imbalance Percent"
+        unique_id: tibber_phase_current_imbalance_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set l1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set l2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set l3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set values = [l1, l2, l3] %}
+          {% set mean = (l1 + l2 + l3) / 3 if (l1 + l2 + l3) != 0 else 0 %}
+          {% set diff = values|max - values|min %}
+          {% if mean > 0 %}
+            {{ ((diff / mean) * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Tibber Phase Voltage Imbalance"
+        unique_id: tibber_phase_voltage_imbalance
+        unit_of_measurement: "V"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% set values = [v1, v2, v3] %}
+          {{ (values|max - values|min) | round(2) }}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Tibber Phase Voltage Imbalance Percent"
+        unique_id: tibber_phase_voltage_imbalance_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% set values = [v1, v2, v3] %}
+          {% set mean = (v1 + v2 + v3) / 3 if (v1 + v2 + v3) != 0 else 0 %}
+          {% set diff = values|max - values|min %}
+          {% if mean > 0 %}
+            {{ ((diff / mean) * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Phase Current Imbalance Percent"
+        unique_id: phase_current_imbalance_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set l1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set l2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set l3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set values = [l1, l2, l3] %}
+          {% set mean = (l1 + l2 + l3) / 3 if (l1 + l2 + l3) != 0 else 0 %}
+          {% set diff = values|max - values|min %}
+          {% if mean > 0 %}
+            {{ ((diff / mean) * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Phase Voltage Imbalance Percent"
+        unique_id: phase_voltage_imbalance_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% set values = [v1, v2, v3] %}
+          {% set mean = (v1 + v2 + v3) / 3 if (v1 + v2 + v3) != 0 else 0 %}
+          {% set diff = values|max - values|min %}
+          {% if mean > 0 %}
+            {{ ((diff / mean) * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Overvoltage Alarm"
+        unique_id: overvoltage_alarm
+        unit_of_measurement: "count"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% if v1 > 253 or v2 > 253 or v3 > 253 %}1{% else %}0{% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Overvoltage Margin Max"
+        unique_id: overvoltage_margin_max
+        unit_of_measurement: "V"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% set values = [v1, v2, v3] %}
+          {{ (values|max - 253) | round(2) }}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Neutral Current Estimate"
+        unique_id: neutral_current_estimate
+        unit_of_measurement: "A"
+        state: >-
+          {% set l1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set l2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set l3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set neutral = (l1*l1 + l2*l2 + l3*l3 - l1*l2 - l2*l3 - l3*l1) ** 0.5 %}
+          {{ neutral | round(2) }}
+        device_class: current
+        state_class: measurement
+      - name: "Neutral Heat Loss"
+        unique_id: neutral_heat_loss
+        unit_of_measurement: "W"
+        state: >-
+          {% set l1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set l2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set l3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set neutral = (l1*l1 + l2*l2 + l3*l3 - l1*l2 - l2*l3 - l3*l1) ** 0.5 %}
+          {% set r_neutral = 0.1 %}
+          {{ (neutral * neutral * r_neutral) | round(2) }}
+        device_class: power
+        state_class: measurement
+      - name: "Line Heat Loss"
+        unique_id: line_heat_loss
+        unit_of_measurement: "W"
+        state: >-
+          {% set l1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set l2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set l3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set r_line = 0.1 %}
+          {{ ((l1*l1 + l2*l2 + l3*l3) * r_line) | round(2) }}
+        device_class: power
+        state_class: measurement
+      - name: "Phase Voltage Imbalance L1 Percent"
+        unique_id: phase_voltage_imbalance_l1_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% set mean = (v1 + v2 + v3) / 3 if (v1 + v2 + v3) != 0 else 0 %}
+          {% if mean > 0 %}
+            {{ ((v1 - mean) / mean * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Phase Voltage Imbalance L2 Percent"
+        unique_id: phase_voltage_imbalance_l2_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% set mean = (v1 + v2 + v3) / 3 if (v1 + v2 + v3) != 0 else 0 %}
+          {% if mean > 0 %}
+            {{ ((v2 - mean) / mean * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Phase Voltage Imbalance L3 Percent"
+        unique_id: phase_voltage_imbalance_l3_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% set mean = (v1 + v2 + v3) / 3 if (v1 + v2 + v3) != 0 else 0 %}
+          {% if mean > 0 %}
+            {{ ((v3 - mean) / mean * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Phase Current Imbalance L1 Percent"
+        unique_id: phase_current_imbalance_l1_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set i1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set i2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set i3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set mean = (i1 + i2 + i3) / 3 if (i1 + i2 + i3) != 0 else 0 %}
+          {% if mean > 0 %}
+            {{ ((i1 - mean) / mean * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Phase Current Imbalance L2 Percent"
+        unique_id: phase_current_imbalance_l2_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set i1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set i2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set i3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set mean = (i1 + i2 + i3) / 3 if (i1 + i2 + i3) != 0 else 0 %}
+          {% if mean > 0 %}
+            {{ ((i2 - mean) / mean * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Phase Current Imbalance L3 Percent"
+        unique_id: phase_current_imbalance_l3_percent
+        unit_of_measurement: "%"
+        state: >-
+          {% set i1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set i2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set i3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set mean = (i1 + i2 + i3) / 3 if (i1 + i2 + i3) != 0 else 0 %}
+          {% if mean > 0 %}
+            {{ ((i3 - mean) / mean * 100) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        device_class: power_factor
+        state_class: measurement
+      - name: "Total Active Power Sum"
+        unique_id: total_active_power_sum
+        unit_of_measurement: "W"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% set i1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set i2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set i3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {{ (v1*i1 + v2*i2 + v3*i3) | round(1) }}
+        device_class: power
+        state_class: measurement
+      - name: "Phase Power L1"
+        unique_id: phase_power_l1
+        unit_of_measurement: "W"
+        state: >-
+          {% set v1 = states('sensor.tibber_pulse_gnejsarn_spanning_fas1')|float(0) %}
+          {% set i1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {{ (v1 * i1) | round(1) }}
+        device_class: power
+        state_class: measurement
+      - name: "Phase Power L2"
+        unique_id: phase_power_l2
+        unit_of_measurement: "W"
+        state: >-
+          {% set v2 = states('sensor.tibber_pulse_gnejsarn_spanning_fas2')|float(0) %}
+          {% set i2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {{ (v2 * i2) | round(1) }}
+        device_class: power
+        state_class: measurement
+      - name: "Phase Power L3"
+        unique_id: phase_power_l3
+        unit_of_measurement: "W"
+        state: >-
+          {% set v3 = states('sensor.tibber_pulse_gnejsarn_spanning_fas3')|float(0) %}
+          {% set i3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {{ (v3 * i3) | round(1) }}
+        device_class: power
+        state_class: measurement
+      - name: "Neutral Current L1 Estimate"
+        unique_id: neutral_current_l1
+        unit_of_measurement: "A"
+        state: >-
+          {% set i1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set i2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set i3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set mean = (i1 + i2 + i3) / 3 if (i1 + i2 + i3) != 0 else 0 %}
+          {{ (i1 - mean) | abs | round(2) }}
+        device_class: current
+        state_class: measurement
+      - name: "Neutral Current L2 Estimate"
+        unique_id: neutral_current_l2
+        unit_of_measurement: "A"
+        state: >-
+          {% set i1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set i2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set i3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set mean = (i1 + i2 + i3) / 3 if (i1 + i2 + i3) != 0 else 0 %}
+          {{ (i2 - mean) | abs | round(2) }}
+        device_class: current
+        state_class: measurement
+      - name: "Neutral Current L3 Estimate"
+        unique_id: neutral_current_l3
+        unit_of_measurement: "A"
+        state: >-
+          {% set i1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set i2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set i3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set mean = (i1 + i2 + i3) / 3 if (i1 + i2 + i3) != 0 else 0 %}
+          {{ (i3 - mean) | abs | round(2) }}
+        device_class: current
+        state_class: measurement
+      - name: "Line Heat Loss L1"
+        unique_id: line_heat_loss_l1
+        unit_of_measurement: "W"
+        state: >-
+          {% set i1 = states('sensor.tibber_pulse_gnejsarn_strom_fas1')|float(0) %}
+          {% set r_line = 0.1 %}
+          {{ (i1 * i1 * r_line) | round(2) }}
+        device_class: power
+        state_class: measurement
+      - name: "Line Heat Loss L2"
+        unique_id: line_heat_loss_l2
+        unit_of_measurement: "W"
+        state: >-
+          {% set i2 = states('sensor.tibber_pulse_gnejsarn_strom_fas2')|float(0) %}
+          {% set r_line = 0.1 %}
+          {{ (i2 * i2 * r_line) | round(2) }}
+        device_class: power
+        state_class: measurement
+      - name: "Line Heat Loss L3"
+        unique_id: line_heat_loss_l3
+        unit_of_measurement: "W"
+        state: >-
+          {% set i3 = states('sensor.tibber_pulse_gnejsarn_strom_fas3')|float(0) %}
+          {% set r_line = 0.1 %}
+          {{ (i3 * i3 * r_line) | round(2) }}
+        device_class: power
+        state_class: measurement
+
+automation:
+  - id: alert_overvoltage
+    alias: "Alert: Overvoltage"
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.overvoltage_alarm
+        above: 0.5
+        for: "00:01:00"
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "Overvoltage"
+          message: "Överspänning upptäckt på någon fas."
+  - id: alert_phase_current_imbalance
+    alias: "Alert: Phase current imbalance"
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.phase_current_imbalance_percent
+        above: 20
+        for: "00:05:00"
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "Fasobalans"
+          message: "Strömobalans över 20% i 5 minuter."

@@ -1,0 +1,33 @@
+{
+  "title": "Tibber Pulse P1",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tibber Pulse P1",
+        "description": "Ange Tibber-API-token (samma som vanliga Tibber-integrationen). Om Tibber redan är tillagd är fältet förifyllt och kan lämnas orört.",
+        "data": {
+          "token": "API-token"
+        }
+      },
+      "home": {
+        "title": "Välj hem",
+        "description": "Välj vilket Tibber-hem som ska användas.",
+        "data": {
+          "home_id": "Hem"
+        }
+      },
+      "device": {
+        "title": "Välj Tibber Pulse",
+        "description": "Hemmet representerar Pulse-enheten.",
+        "data": {
+          "device_id": "Enhet"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Ogiltig token",
+      "cannot_connect": "Kunde inte nå Tibber API",
+      "no_homes": "Inga hem hittades"
+    }
+  }
+}

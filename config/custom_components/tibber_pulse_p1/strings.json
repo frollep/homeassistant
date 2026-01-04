@@ -1,0 +1,34 @@
+{
+  "title": "Tibber Pulse P1",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tibber Pulse P1",
+        "description": "Enter your Tibber API token (same as the regular Tibber integration). If you already added Tibber, the field is pre-filled and can be left as-is.",
+        "data": {
+          "token": "API token"
+        }
+      },
+      "home": {
+        "title": "Select home",
+        "description": "Choose which Tibber home to monitor.",
+        "data": {
+          "home_id": "Home"
+        }
+      },
+      "device": {
+        "title": "Select Tibber Pulse",
+        "description": "Pick the Tibber Pulse P1 device for this home.",
+        "data": {
+          "device_id": "Device"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid token",
+      "cannot_connect": "Could not reach Tibber API",
+      "no_homes": "No homes available for this token",
+      "no_devices": "No devices available for this home"
+    }
+  }
+}
