@@ -1,0 +1,411 @@
+{
+  "uid": "matforradet",
+  "title": "Matforradet",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "-- Grafana --",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Aktuell effekt",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1500
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true,
+        "orientation": "horizontal"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"W\" WHERE \"entity_id\"='matforradet_aktuell_effekt' AND $timeFilter",
+          "interval": "5s"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Styrsignal",
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true,
+        "orientation": "horizontal"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"%\" WHERE \"entity_id\"='matforradet_styrsignal' AND $timeFilter",
+          "interval": "1m"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Effekt over tid",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt"
+        }
+      },
+      "options": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "fillOpacity": 0,
+        "showPoints": "always",
+        "spanNulls": true,
+        "legend": {
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT mean(\"value\") FROM \"W\" WHERE \"entity_id\"='matforradet_aktuell_effekt' AND $timeFilter GROUP BY time(5m) fill(previous)",
+          "interval": "5m"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Dagsforbrukning",
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "kWh"
+        }
+      },
+      "options": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "fillOpacity": 0,
+        "showPoints": "never",
+        "spanNulls": true,
+        "legend": {
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"kWh\" WHERE \"entity_id\"='matforradet_dagsforbrukning' AND $timeFilter GROUP BY time(1h) fill(previous)",
+          "interval": "1h"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Arsforbrukning",
+      "gridPos": {
+        "x": 12,
+        "y": 6,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "kWh"
+        }
+      },
+      "options": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "fillOpacity": 0,
+        "showPoints": "never",
+        "spanNulls": true,
+        "legend": {
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"kWh\" WHERE \"entity_id\"='matforradet_arsforbrukning' AND $timeFilter GROUP BY time(1d) fill(previous)",
+          "interval": "1d"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Temperatur",
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius"
+        }
+      },
+      "options": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "fillOpacity": 0,
+        "showPoints": "never",
+        "spanNulls": true,
+        "legend": {
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT mean(\"value\") AS \"value\" FROM \"C\" WHERE \"entity_id\"='matforradet_temperatur' AND $timeFilter GROUP BY time(5m) fill(previous)",
+          "interval": "5m"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Aktuell temperatur",
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "celsius",
+          "unitScale": true
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true,
+        "orientation": "horizontal"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") AS \"value\" FROM \"C\" WHERE \"entity_id\"='matforradet_temperatur' AND $timeFilter",
+          "interval": "1m"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Temperatur (raw)",
+      "gridPos": {
+        "x": 18,
+        "y": 12,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"C\" WHERE \"entity_id\"='matforradet_temperatur' AND $timeFilter",
+          "interval": "1m"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": []
+  }
+}

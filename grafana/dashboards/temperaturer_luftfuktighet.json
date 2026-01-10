@@ -1,0 +1,211 @@
+{
+  "uid": "temperaturer-luftfuktighet",
+  "title": "Temperaturer och Luftfuktighet",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "-- Grafana --",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Dehumidifier Temp Nu",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "unitScale": true
+        }
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "horizontal",
+        "textMode": "auto",
+        "wideLayout": true,
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "showPercentChange": false
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"°C\" WHERE \"entity_id\"='dehumidifier_20l_temperatur'",
+          "interval": "1m"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Dehumidifier Luftfuktighet Nu",
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "unitScale": true
+        }
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "horizontal",
+        "textMode": "auto",
+        "wideLayout": true,
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "showPercentChange": false
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"%\" WHERE \"entity_id\"='dehumidifier_20l_luftfuktighet'",
+          "interval": "1m"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Dehumidifier Temp Tvattstuga",
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius"
+        }
+      },
+      "options": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "fillOpacity": 0,
+        "showPoints": "never",
+        "spanNulls": true,
+        "legend": {
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT mean(\"value\") FROM \"°C\" WHERE (\"entity_id\"='dehumidifier_20l_temperatur' OR \"entity_id\"='ute_temp_temperatur') AND $timeFilter GROUP BY time(5m), \"entity_id\" fill(previous)",
+          "interval": "5m",
+          "alias": "$tag_entity_id"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Dehumidifier Luftfuktighet Tvattstuga",
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        }
+      },
+      "options": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "fillOpacity": 0,
+        "showPoints": "never",
+        "spanNulls": true,
+        "legend": {
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT mean(\"value\") FROM \"%\" WHERE (\"entity_id\"='dehumidifier_20l_luftfuktighet' OR \"entity_id\"='ute_temp_luftfuktighet') AND $timeFilter GROUP BY time(5m), \"entity_id\" fill(previous)",
+          "interval": "5m",
+          "alias": "$tag_entity_id"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": []
+  }
+}

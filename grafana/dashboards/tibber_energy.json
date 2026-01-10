@@ -1,14 +1,4 @@
 {
-  "uid": "tibber-energy",
-  "title": "Tibber Energy & Pulse",
-  "timezone": "utc",
-  "schemaVersion": 39,
-  "version": 1,
-  "refresh": "30s",
-  "time": {
-    "from": "now-48h",
-    "to": "now+2h"
-  },
   "annotations": {
     "list": [
       {
@@ -27,224 +17,72 @@
   },
   "panels": [
     {
-      "type": "stat",
-      "title": "Total effekt",
-      "gridPos": {
-        "x": 0,
-        "y": 0,
-        "w": 6,
-        "h": 4
-      },
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb-ha"
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "watt"
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
         }
       },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
       "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "last",
+          "fields": "",
           "values": false
         },
-        "orientation": "horizontal"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM \"W\" WHERE \"entity_id\"='total_active_power_sum' AND $timeFilter",
           "rawQuery": true,
-          "query": "SELECT last(\"value\") FROM /.*/ WHERE (\"entity_id\"='total_active_power_sum' OR \"entity_id\"='tibber_pulse_gnejsarn_power_total' OR \"entity_id\"='tibber_pulse_gnejsarn_effekt' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_power_total') AND $timeFilter",
-          "interval": "5s"
-        }
-      ]
-    },
-    {
-      "type": "timeseries",
-      "title": "Total effekt \u00f6ver tid",
-      "gridPos": {
-        "x": 6,
-        "y": 0,
-        "w": 12,
-        "h": 6
-      },
-      "datasource": {
-        "type": "influxdb",
-        "uid": "influxdb-ha"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "watt"
-        }
-      },
-      "options": {
-        "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
-        "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
-        "legend": {
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "format": "time_series",
-          "rawQuery": true,
-          "query": "SELECT mean(\"value\") FROM \"W\" WHERE \"entity_id\"='total_active_power_sum' AND $timeFilter GROUP BY time(5s) fill(previous)",
-          "interval": "5s"
+          "refId": "A"
         }
       ],
-      "alert": {
-        "name": "Alert: Last\u00e4ndring",
-        "message": "St\u00f6rre last\u00e4ndring detekterad",
-        "conditions": [
-          {
-            "type": "query",
-            "query": {
-              "params": [
-                "A",
-                "5s",
-                "now"
-              ]
-            },
-            "reducer": {
-              "type": "last",
-              "params": []
-            },
-            "evaluator": {
-              "type": "gt",
-              "params": [
-                5000
-              ]
-            },
-            "operator": {
-              "type": "and"
-            }
-          }
-        ],
-        "executionErrorState": "alerting",
-        "for": "1m",
-        "frequency": "1m",
-        "noDataState": "no_data",
-        "notifications": []
-      }
+      "title": "Total effekt",
+      "type": "stat"
     },
     {
-      "type": "timeseries",
-      "title": "Sp\u00e4nning per fas (L1/L2/L3)",
-      "gridPos": {
-        "x": 0,
-        "y": 6,
-        "w": 12,
-        "h": 6
-      },
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb-ha"
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "volt"
-        }
-      },
-      "options": {
-        "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
-        "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
-        "legend": {
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "format": "time_series",
-          "rawQuery": true,
-          "query": "SELECT mean(\"value\") FROM /.*/ WHERE (\"entity_id\" =~ /tibber_pulse_gnejsarn_spanning_fas[123]/ OR \"entity_id\" =~ /b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l[123]/) AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
-          "interval": "5s",
-          "alias": "$tag_entity_id"
-        }
-      ]
-    },
-    {
-      "type": "timeseries",
-      "title": "Str\u00f6m per fas (L1/L2/L3)",
-      "gridPos": {
-        "x": 12,
-        "y": 6,
-        "w": 12,
-        "h": 6
-      },
-      "datasource": {
-        "type": "influxdb",
-        "uid": "influxdb-ha"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "ampere"
-        }
-      },
-      "options": {
-        "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
-        "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
-        "legend": {
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "format": "time_series",
-          "rawQuery": true,
-          "query": "SELECT mean(\"value\") FROM /.*/ WHERE (\"entity_id\" =~ /tibber_pulse_gnejsarn_strom_fas[123]/ OR \"entity_id\" =~ /b6559c39_44ef_401f_bc28_4d476a8b9728_current_l[123]/) AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
-          "interval": "5s",
-          "alias": "$tag_entity_id"
-        }
-      ]
-    },
-    {
-      "type": "timeseries",
-      "title": "Sp\u00e4nnings-obalans %",
-      "gridPos": {
-        "x": 0,
-        "y": 12,
-        "w": 12,
-        "h": 6
-      },
-      "datasource": {
-        "type": "influxdb",
-        "uid": "influxdb-ha"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -257,39 +95,58 @@
                 "value": 2
               }
             ]
-          }
+          },
+          "unit": "currencySEK",
+          "unitScale": true
         }
       },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
       "options": {
-        "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
-        "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
-        "legend": {
-          "showLegend": true
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
+          "interval": "1m",
+          "query": "SELECT last(\"value\") FROM \"SEK/kWh\" WHERE \"entity_id\"='gnejsarn_elpris' AND $timeFilter",
           "rawQuery": true,
-          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_voltage_imbalance_l[123]_percent/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
-          "interval": "5s"
+          "refId": "A"
         }
       ],
+      "title": "Spotpris inkl moms och påslag",
+      "type": "stat"
+    },
+    {
       "alert": {
-        "name": "Alert: Sp\u00e4nnings-obalans",
-        "message": "Alert: Sp\u00e4nnings-obalans",
         "conditions": [
           {
-            "type": "query",
+            "evaluator": {
+              "params": [
+                5000
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
             "query": {
               "params": [
                 "A",
@@ -298,35 +155,274 @@
               ]
             },
             "reducer": {
-              "type": "last",
-              "params": []
+              "params": [],
+              "type": "last"
             },
-            "evaluator": {
-              "type": ">",
-              "params": [
-                2
-              ]
-            },
-            "operator": {
-              "type": "and"
-            }
+            "type": "query"
           }
         ],
         "executionErrorState": "alerting",
         "for": "1m",
         "frequency": "1m",
+        "message": "Större laständring detekterad",
+        "name": "Alert: Laständring",
         "noDataState": "no_data",
         "notifications": []
-      }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt"
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT mean(\"value\") FROM \"W\" WHERE \"entity_id\"='total_active_power_sum' AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Total effekt över tid",
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Str\u00f6m-obalans %",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "volt"
+        }
+      },
       "gridPos": {
-        "x": 12,
-        "y": 12,
+        "h": 6,
         "w": 12,
-        "h": 6
+        "x": 0,
+        "y": 6
+      },
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "$tag_entity_id",
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT mean(\"value\") FROM /.*/ WHERE (\"entity_id\" =~ /tibber_pulse_gnejsarn_spanning_fas[123]/ OR \"entity_id\" =~ /b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l[123]/) AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Spänning per fas (L1/L2/L3)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ampere"
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "$tag_entity_id",
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT mean(\"value\") FROM /.*/ WHERE (\"entity_id\" =~ /tibber_pulse_gnejsarn_strom_fas[123]/ OR \"entity_id\" =~ /b6559c39_44ef_401f_bc28_4d476a8b9728_current_l[123]/) AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Ström per fas (L1/L2/L3)",
+      "type": "timeseries"
+    },
+    {
+      "alert": {
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                2
+              ],
+              "type": ">"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5s",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "1m",
+        "frequency": "1m",
+        "message": "Alert: Spännings-obalans",
+        "name": "Alert: Spännings-obalans",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "percent"
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_voltage_imbalance_l[123]_percent/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Spännings-obalans %",
+      "type": "timeseries"
+    },
+    {
+      "alert": {
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                2
+              ],
+              "type": ">"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5s",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "1m",
+        "frequency": "1m",
+        "message": "Alert: Ström-obalans",
+        "name": "Alert: Ström-obalans",
+        "noDataState": "no_data",
+        "notifications": []
       },
       "datasource": {
         "type": "influxdb",
@@ -337,16 +433,22 @@
           "unit": "percent"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -354,57 +456,17 @@
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
-          "rawQuery": true,
+          "interval": "5s",
           "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_current_imbalance_l[123]_percent/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
-          "interval": "5s"
+          "rawQuery": true,
+          "refId": "A"
         }
       ],
-      "alert": {
-        "name": "Alert: Str\u00f6m-obalans",
-        "message": "Alert: Str\u00f6m-obalans",
-        "conditions": [
-          {
-            "type": "query",
-            "query": {
-              "params": [
-                "A",
-                "5s",
-                "now"
-              ]
-            },
-            "reducer": {
-              "type": "last",
-              "params": []
-            },
-            "evaluator": {
-              "type": ">",
-              "params": [
-                2
-              ]
-            },
-            "operator": {
-              "type": "and"
-            }
-          }
-        ],
-        "executionErrorState": "alerting",
-        "for": "1m",
-        "frequency": "1m",
-        "noDataState": "no_data",
-        "notifications": []
-      }
+      "title": "Ström-obalans %",
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Ackumulerad f\u00f6rbrukning",
-      "gridPos": {
-        "x": 0,
-        "y": 18,
-        "w": 12,
-        "h": 6
-      },
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb-ha"
@@ -414,16 +476,22 @@
           "unit": "kWh"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -431,23 +499,17 @@
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
-          "rawQuery": true,
+          "interval": "5s",
           "query": "SELECT last(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_ackumulerad_forbrukning' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_energy_imported') AND $timeFilter GROUP BY time(5s) fill(previous)",
-          "interval": "5s"
+          "rawQuery": true,
+          "refId": "A"
         }
-      ]
+      ],
+      "title": "Ackumulerad förbrukning",
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "F\u00f6rbrukning aktuell timme",
-      "gridPos": {
-        "x": 12,
-        "y": 18,
-        "w": 12,
-        "h": 6
-      },
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb-ha"
@@ -457,16 +519,22 @@
           "unit": "kWh"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -474,23 +542,17 @@
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
-          "rawQuery": true,
+          "interval": "5s",
           "query": "SELECT last(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_ackumulerad_forbrukning_under_aktuell_timme' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_accumulatedconsumptionlasthour') AND $timeFilter GROUP BY time(5s) fill(previous)",
-          "interval": "5s"
+          "rawQuery": true,
+          "refId": "A"
         }
-      ]
+      ],
+      "title": "Förbrukning aktuell timme",
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Ackumulerad kostnad",
-      "gridPos": {
-        "x": 0,
-        "y": 24,
-        "w": 12,
-        "h": 6
-      },
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb-ha"
@@ -500,16 +562,22 @@
           "unit": "currencySEK"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -517,23 +585,17 @@
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
-          "rawQuery": true,
+          "interval": "5s",
           "query": "SELECT last(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_ackumulerad_kostnad' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_accumulatedcost') AND $timeFilter GROUP BY time(5s) fill(previous)",
-          "interval": "5s"
+          "rawQuery": true,
+          "refId": "A"
         }
-      ]
+      ],
+      "title": "Ackumulerad kostnad",
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Elproduktion",
-      "gridPos": {
-        "x": 12,
-        "y": 24,
-        "w": 12,
-        "h": 6
-      },
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb-ha"
@@ -543,16 +605,22 @@
           "unit": "watt"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -560,22 +628,50 @@
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
-          "rawQuery": true,
+          "interval": "5s",
           "query": "SELECT mean(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_elproduktion' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_power_export') AND $timeFilter GROUP BY time(5s) fill(previous)",
-          "interval": "5s"
+          "rawQuery": true,
+          "refId": "A"
         }
-      ]
+      ],
+      "title": "Elproduktion",
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Neutral v\u00e4rmef\u00f6rlust",
-      "gridPos": {
-        "x": 0,
-        "y": 30,
-        "w": 12,
-        "h": 6
+      "alert": {
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                0
+              ],
+              "type": ">"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5s",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "1m",
+        "frequency": "1m",
+        "message": "Alert: Neutral värmeförlust",
+        "name": "Alert: Neutral värmeförlust",
+        "noDataState": "no_data",
+        "notifications": []
       },
       "datasource": {
         "type": "influxdb",
@@ -586,16 +682,22 @@
           "unit": "watt"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 30
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -603,19 +705,29 @@
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
-          "rawQuery": true,
+          "interval": "5s",
           "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='neutral_heat_loss' AND $timeFilter GROUP BY time(5s) fill(previous)",
-          "interval": "5s"
+          "rawQuery": true,
+          "refId": "A"
         }
       ],
+      "title": "Neutral värmeförlust",
+      "type": "timeseries"
+    },
+    {
       "alert": {
-        "name": "Alert: Neutral v\u00e4rmef\u00f6rlust",
-        "message": "Alert: Neutral v\u00e4rmef\u00f6rlust",
         "conditions": [
           {
-            "type": "query",
+            "evaluator": {
+              "params": [
+                0
+              ],
+              "type": ">"
+            },
+            "operator": {
+              "type": "and"
+            },
             "query": {
               "params": [
                 "A",
@@ -624,35 +736,19 @@
               ]
             },
             "reducer": {
-              "type": "last",
-              "params": []
+              "params": [],
+              "type": "last"
             },
-            "evaluator": {
-              "type": ">",
-              "params": [
-                0
-              ]
-            },
-            "operator": {
-              "type": "and"
-            }
+            "type": "query"
           }
         ],
         "executionErrorState": "alerting",
         "for": "1m",
         "frequency": "1m",
+        "message": "Alert: Ledningsförlust",
+        "name": "Alert: Ledningsförlust",
         "noDataState": "no_data",
         "notifications": []
-      }
-    },
-    {
-      "type": "timeseries",
-      "title": "Ledningsf\u00f6rlust",
-      "gridPos": {
-        "x": 12,
-        "y": 30,
-        "w": 12,
-        "h": 6
       },
       "datasource": {
         "type": "influxdb",
@@ -663,16 +759,22 @@
           "unit": "watt"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -680,19 +782,29 @@
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
-          "rawQuery": true,
+          "interval": "5s",
           "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /line_heat_loss_l[123]/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
-          "interval": "5s"
+          "rawQuery": true,
+          "refId": "A"
         }
       ],
+      "title": "Ledningsförlust",
+      "type": "timeseries"
+    },
+    {
       "alert": {
-        "name": "Alert: Ledningsf\u00f6rlust",
-        "message": "Alert: Ledningsf\u00f6rlust",
         "conditions": [
           {
-            "type": "query",
+            "evaluator": {
+              "params": [
+                0
+              ],
+              "type": ">"
+            },
+            "operator": {
+              "type": "and"
+            },
             "query": {
               "params": [
                 "A",
@@ -701,35 +813,19 @@
               ]
             },
             "reducer": {
-              "type": "last",
-              "params": []
+              "params": [],
+              "type": "last"
             },
-            "evaluator": {
-              "type": ">",
-              "params": [
-                0
-              ]
-            },
-            "operator": {
-              "type": "and"
-            }
+            "type": "query"
           }
         ],
         "executionErrorState": "alerting",
         "for": "1m",
         "frequency": "1m",
+        "message": "Alert: Neutralström",
+        "name": "Alert: Neutralström",
         "noDataState": "no_data",
         "notifications": []
-      }
-    },
-    {
-      "type": "timeseries",
-      "title": "Neutralstr\u00f6m (estimat)",
-      "gridPos": {
-        "x": 0,
-        "y": 36,
-        "w": 12,
-        "h": 6
       },
       "datasource": {
         "type": "influxdb",
@@ -740,16 +836,22 @@
           "unit": "ampere"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 36
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -757,19 +859,29 @@
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
-          "rawQuery": true,
+          "interval": "5s",
           "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='neutral_current_estimate' AND $timeFilter GROUP BY time(5s) fill(previous)",
-          "interval": "5s"
+          "rawQuery": true,
+          "refId": "A"
         }
       ],
+      "title": "Neutralström (estimat)",
+      "type": "timeseries"
+    },
+    {
       "alert": {
-        "name": "Alert: Neutralstr\u00f6m",
-        "message": "Alert: Neutralstr\u00f6m",
         "conditions": [
           {
-            "type": "query",
+            "evaluator": {
+              "params": [
+                0
+              ],
+              "type": ">"
+            },
+            "operator": {
+              "type": "and"
+            },
             "query": {
               "params": [
                 "A",
@@ -778,35 +890,19 @@
               ]
             },
             "reducer": {
-              "type": "last",
-              "params": []
+              "params": [],
+              "type": "last"
             },
-            "evaluator": {
-              "type": ">",
-              "params": [
-                0
-              ]
-            },
-            "operator": {
-              "type": "and"
-            }
+            "type": "query"
           }
         ],
         "executionErrorState": "alerting",
         "for": "1m",
         "frequency": "1m",
+        "message": "Alert: Overvoltage",
+        "name": "Alert: Overvoltage",
         "noDataState": "no_data",
         "notifications": []
-      }
-    },
-    {
-      "type": "timeseries",
-      "title": "\u00d6versp\u00e4nning alarm",
-      "gridPos": {
-        "x": 0,
-        "y": 36,
-        "w": 12,
-        "h": 6
       },
       "datasource": {
         "type": "influxdb",
@@ -817,16 +913,22 @@
           "unit": "none"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 36
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -834,57 +936,17 @@
       },
       "targets": [
         {
-          "refId": "A",
           "format": "time_series",
-          "rawQuery": true,
+          "interval": "5s",
           "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='overvoltage_alarm' AND $timeFilter GROUP BY time(5s) fill(previous)",
-          "interval": "5s"
+          "rawQuery": true,
+          "refId": "A"
         }
       ],
-      "alert": {
-        "name": "Alert: Overvoltage",
-        "message": "Alert: Overvoltage",
-        "conditions": [
-          {
-            "type": "query",
-            "query": {
-              "params": [
-                "A",
-                "5s",
-                "now"
-              ]
-            },
-            "reducer": {
-              "type": "last",
-              "params": []
-            },
-            "evaluator": {
-              "type": ">",
-              "params": [
-                0
-              ]
-            },
-            "operator": {
-              "type": "and"
-            }
-          }
-        ],
-        "executionErrorState": "alerting",
-        "for": "1m",
-        "frequency": "1m",
-        "noDataState": "no_data",
-        "notifications": []
-      }
+      "title": "Överspänning alarm",
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Effekt per fas (L1/L2/L3)",
-      "gridPos": {
-        "x": 0,
-        "y": 42,
-        "w": 12,
-        "h": 6
-      },
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb-ha"
@@ -894,16 +956,22 @@
           "unit": "watt"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 42
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -911,24 +979,18 @@
       },
       "targets": [
         {
-          "refId": "A",
+          "alias": "$tag_entity_id",
           "format": "time_series",
-          "rawQuery": true,
-          "query": "SELECT mean(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_power_l[123]/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
           "interval": "5s",
-          "alias": "$tag_entity_id"
+          "query": "SELECT mean(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_power_l[123]/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
         }
-      ]
+      ],
+      "title": "Effekt per fas (L1/L2/L3)",
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Neutralstr\u00f6m per fas (estimat)",
-      "gridPos": {
-        "x": 12,
-        "y": 42,
-        "w": 12,
-        "h": 6
-      },
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb-ha"
@@ -938,16 +1000,22 @@
           "unit": "ampere"
         }
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 42
+      },
       "options": {
         "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
         "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
         "legend": {
           "showLegend": true
         },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -955,17 +1023,72 @@
       },
       "targets": [
         {
-          "refId": "A",
+          "alias": "$tag_entity_id",
           "format": "time_series",
-          "rawQuery": true,
-          "query": "SELECT mean(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /neutral_current_l[123]/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
           "interval": "5s",
-          "alias": "$tag_entity_id"
+          "query": "SELECT mean(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /neutral_current_l[123]/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
         }
-      ]
+      ],
+      "title": "Neutralström per fas (estimat)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencySEK"
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 48
+      },
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 10,
+        "legend": {
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "1h",
+          "query": "SELECT last(\"value\") FROM \"SEK/kWh\" WHERE \"entity_id\"='gnejsarn_elpris' AND $timeFilter GROUP BY time(1h) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Spotpris",
+      "type": "timeseries"
     }
   ],
+  "refresh": "30s",
+  "schemaVersion": 39,
   "templating": {
     "list": []
-  }
+  },
+  "time": {
+    "from": "now-48h",
+    "to": "now+2h"
+  },
+  "timezone": "browser",
+  "title": "Tibber Energy & Pulse",
+  "uid": "tibber-energy",
+  "version": 19
 }

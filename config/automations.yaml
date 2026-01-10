@@ -1,0 +1,72 @@
+- id: alert_overvoltage
+  alias: "Alert: Overvoltage"
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.overvoltage_alarm
+      above: 0.5
+      for: "00:01:00"
+  action:
+    - service: persistent_notification.create
+      data:
+        title: "Overvoltage"
+        message: "Överspänning upptäckt på någon fas."
+- id: alert_phase_current_imbalance
+  alias: "Alert: Phase current imbalance"
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.phase_current_imbalance_percent
+      above: 20
+      for: "00:05:00"
+  action:
+    - service: persistent_notification.create
+      data:
+        title: "Fasobalans"
+        message: "Strömobalans över 20% i 5 minuter."
+- id: matforradet_tempvarning
+  alias: "Matforradet tempvarning"
+  description: "Notis nar Matforradet ar over 10C eller under 5C."
+  trigger:
+    - platform: numeric_state
+      entity_id: climate.matforradet
+      attribute: current_temperature
+      above: 10
+    - platform: numeric_state
+      entity_id: climate.matforradet
+      attribute: current_temperature
+      below: 5
+  condition:
+    - condition: template
+      value_template: >
+        {{ this.attributes.last_triggered is none or
+           (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered)) > 3600 }}
+  action:
+    - service: notify.mobile_app_peters_11
+      data:
+        title: "Matforradet temperatur"
+        message: "Temperaturen ar nu {{ state_attr('climate.matforradet', 'current_temperature') }}C."
+    - service: notify.gmail
+      data:
+        title: "Matforradet temperatur"
+        message: "Temperaturen ar nu {{ state_attr('climate.matforradet', 'current_temperature') }}C."
+    - delay: "00:45:00"
+    - choose:
+        - conditions:
+            - condition: numeric_state
+              entity_id: climate.matforradet
+              attribute: current_temperature
+              above: 10
+          sequence:
+            - service: notify.mobile_app_peters_11
+              data:
+                title: "Matforradet temperatur"
+                message: "Temperaturen ar fortfarande over 10C ({{ state_attr('climate.matforradet', 'current_temperature') }}C)."
+        - conditions:
+            - condition: numeric_state
+              entity_id: climate.matforradet
+              attribute: current_temperature
+              below: 5
+          sequence:
+            - service: notify.mobile_app_peters_11
+              data:
+                title: "Matforradet temperatur"
+                message: "Temperaturen ar fortfarande under 5C ({{ state_attr('climate.matforradet', 'current_temperature') }}C)."
