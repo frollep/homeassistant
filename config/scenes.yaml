@@ -1,0 +1,52 @@
+- id: '1767734851763'
+  name: Ny scen
+  entities:
+    sensor.matforradet_aktuell_effekt:
+      state_class: measurement
+      unit_of_measurement: W
+      device_class: power
+      friendly_name: Matförrådet Aktuell effekt
+      state: '168'
+    sensor.matforradet_dagsforbrukning:
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      device_class: energy
+      friendly_name: Matförrådet Dagsförbrukning
+      state: '4.221'
+    number.matforradet_effekt:
+      min: 0
+      max: 2000
+      step: 1
+      mode: auto
+      unit_of_measurement: W
+      device_class: power
+      friendly_name: Matförrådet Effekt
+      state: '400'
+    climate.matforradet:
+      hvac_modes:
+      - heat
+      - 'off'
+      min_temp: 5
+      max_temp: 35
+      target_temp_step: 0.1
+      current_temperature: 5.1
+      temperature: 5
+      hvac_action: heating
+      open_window: enabled_not_active
+      controlled_by_tibber:
+      room: Independent device
+      friendly_name: Matförrådet
+      supported_features: 385
+      state: 'off'
+    sensor.matforradet_styrsignal:
+      state_class: measurement
+      unit_of_measurement: '%'
+      friendly_name: Matförrådet Styrsignal
+      state: '43'
+    sensor.matforradet_arsforbrukning:
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      device_class: energy
+      friendly_name: Matförrådet Årsförbrukning
+      state: '7.497'
+  metadata: {}

@@ -1,0 +1,1 @@
+{"query":"from(bucket: \"ha_energy\") |> range(start: -30d) |> limit(n:5)","type":"flux"}
