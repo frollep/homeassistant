@@ -1,0 +1,5711 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "-- Grafana --",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 11,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.5",
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM \"W\" WHERE \"entity_id\"='total_active_power_sum' AND $timeFilter",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Total effekt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "currencySEK",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.5",
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "1m",
+          "query": "SELECT last(\"value\") FROM \"SEK/kWh\" WHERE \"entity_id\"='gnejsarn_elpris' AND $timeFilter",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Spotpris inkl moms och p\u00e5slag",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "kWh",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 8,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_ackumulerad_forbrukning' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_energy_imported') AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Ackumulerad f\u00f6rbrukning",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 3,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT mean(\"value\") FROM \"W\" WHERE \"entity_id\"='total_active_power_sum' AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Total effekt \u00f6ver tid",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencySEK",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 10,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_ackumulerad_kostnad' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_accumulatedcost') AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Ackumulerad kostnad",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "kWh",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 9,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_ackumulerad_forbrukning_under_aktuell_timme' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_accumulatedconsumptionlasthour') AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "F\u00f6rbrukning aktuell timme",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "volt",
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3_estimate"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 4,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "$tag_entity_id",
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT mean(\"value\") FROM /.*/ WHERE (\"entity_id\" =~ /tibber_pulse_gnejsarn_spanning_fas[123]/ OR \"entity_id\" =~ /b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l[123]/) AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Sp\u00e4nning per fas (L1/L2/L3)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3_estimate"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 16,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "$tag_entity_id",
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT mean(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_power_l[123]/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Effekt per fas (L1/L2/L3)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "percent",
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last phase_voltage_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last phase_voltage_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last phase_voltage_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3_estimate"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 30
+      },
+      "id": 6,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_voltage_imbalance_l[123]_percent/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Sp\u00e4nnings-obalans %",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ampere",
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3_estimate"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
+      "id": 5,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "$tag_entity_id",
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT mean(\"value\") FROM /.*/ WHERE (\"entity_id\" =~ /tibber_pulse_gnejsarn_strom_fas[123]/ OR \"entity_id\" =~ /b6559c39_44ef_401f_bc28_4d476a8b9728_current_l[123]/) AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Str\u00f6m per fas (L1/L2/L3)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 36
+      },
+      "id": 12,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='neutral_heat_loss' AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Neutral v\u00e4rmef\u00f6rlust",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent",
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last phase_current_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last phase_current_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "%.last phase_current_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3_estimate"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 36
+      },
+      "id": 7,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_current_imbalance_l[123]_percent/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Str\u00f6m-obalans %",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencySEK",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 42
+      },
+      "id": 18,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 10,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "1h",
+          "query": "SELECT last(\"value\") FROM \"SEK/kWh\" WHERE \"entity_id\"='gnejsarn_elpris' AND $timeFilter GROUP BY time(1h) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Spotpris",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas1_percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas2_percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas3_percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas1_percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas2_percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas3_percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3_estimate"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 42
+      },
+      "id": 13,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /line_heat_loss_l[123]/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Ledningsf\u00f6rlust",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ampere",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 48
+      },
+      "id": 14,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='neutral_current_estimate' AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Neutralstr\u00f6m (estimat)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ampere",
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_power_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3_estimate"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 48
+      },
+      "id": 17,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "$tag_entity_id",
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT mean(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /neutral_current_l[123]/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Neutralstr\u00f6m per fas (estimat)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 54
+      },
+      "id": 15,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='overvoltage_alarm' AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "\u00d6versp\u00e4nning alarm",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 54
+      },
+      "id": 11,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT mean(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_elproduktion' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_power_export') AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Elproduktion",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "max": 3700,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 3500
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_power_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "current_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_strom_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "strom_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "b6559c39_44ef_401f_bc28_4d476a8b9728_voltage_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "voltage_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas1"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas2"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tibber_pulse_gnejsarn_spanning_fas3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "spanning_Fas3"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_voltage_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_voltage_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l1_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas1_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l2_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas2_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "phase_current_imbalance_l3_percent"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "phase_current_imbalance_Fas3_percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "line_heat_loss_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "line_heat_loss_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l1_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas1_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l2_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas2_estimate"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "neutral_current_l3_estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "neutral_current_Fas3_estimate"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "id": 19,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 10,
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "10.3.5",
+      "targets": [
+        {
+          "alias": "$tag_entity_id",
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_power_l[123]/ AND $timeFilter GROUP BY \"entity_id\"",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Aktuell effekt per fas (L1/L2/L3)",
+      "type": "bargauge"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timeRangeUpdatedDuringEditOrView": false,
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Tibber Energy & Pulse Peter",
+  "uid": "f80bc7da-9685-4600-9ad7-b8b0f82ea1ff",
+  "version": 1,
+  "weekStart": ""
+}

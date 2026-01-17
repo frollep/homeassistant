@@ -33,6 +33,7 @@ influxdb:
   include:
     domains:
       - sensor
+      - binary_sensor
     entity_globs:
       - sensor.tibber*
       - sensor.b6559c39*
@@ -44,6 +45,8 @@ influxdb:
       - sensor.*heat_loss*
       - sensor.neutral*
       - sensor.total_active_power_sum
+      - sensor.olga_*
+      - binary_sensor.olga_*
 
 template:
   - trigger:

@@ -395,6 +395,65 @@
       ],
       "title": "Ute Temp Luftfuktighet",
       "type": "timeseries"
+    },
+    {
+      "type": "stat",
+      "title": "Aktuell temperatur",
+      "gridPos": {
+        "x": 0,
+        "y": 40,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "celsius",
+          "unitScale": true
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true,
+        "orientation": "horizontal"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") AS \"value\" FROM \"C\" WHERE \"entity_id\"='matforradet_temperatur' AND $timeFilter",
+          "interval": "1m"
+        }
+      ]
     }
   ],
   "refresh": "30s",
