@@ -76,7 +76,7 @@
         {
           "format": "time_series",
           "interval": "5s",
-          "query": "SELECT last(\"value\") FROM \"W\" WHERE \"entity_id\"='total_active_power_sum' AND $timeFilter",
+          "query": "SELECT last(\"value\") FROM \"W\" WHERE \"entity_id\"='total_active_power_sum'",
           "rawQuery": true,
           "refId": "A"
         }
@@ -138,7 +138,7 @@
         {
           "format": "time_series",
           "interval": "1m",
-          "query": "SELECT last(\"value\") FROM \"SEK/kWh\" WHERE \"entity_id\"='gnejsarn_elpris' AND $timeFilter",
+          "query": "SELECT last(\"value\") FROM \"SEK/kWh\" WHERE \"entity_id\"='gnejsarn_elpris'",
           "rawQuery": true,
           "refId": "A"
         }
@@ -5682,7 +5682,7 @@
           "alias": "$tag_entity_id",
           "format": "time_series",
           "interval": "5s",
-          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_power_l[123]/ AND $timeFilter GROUP BY \"entity_id\"",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_power_l[123]/ GROUP BY \"entity_id\"",
           "rawQuery": true,
           "refId": "A"
         }

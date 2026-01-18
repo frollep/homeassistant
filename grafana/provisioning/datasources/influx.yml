@@ -6,6 +6,7 @@ datasources:
     type: influxdb
     access: proxy
     isDefault: true
+    version: 7
     url: http://influxdb:8086
     database: ${INFLUXDB_BUCKET}
     jsonData:
