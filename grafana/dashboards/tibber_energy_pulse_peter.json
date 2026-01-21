@@ -151,6 +151,66 @@
         "type": "influxdb",
         "uid": "influxdb-ha"
       },
+      "description": "Manad: ${__from:date:MMMM}",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencySEK",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 200,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.5",
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "1m",
+          "query": "SELECT last(\"value\") FROM \"SEK\" WHERE \"entity_id\"='gnejsarn_manadskostnad' AND $timeFilter",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "now/M",
+      "title": "Elkostnad denna manad",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -432,12 +492,13 @@
         {
           "format": "time_series",
           "interval": "5s",
-          "query": "SELECT last(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_ackumulerad_kostnad' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_accumulatedcost') AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='tibber_pulse_gnejsarn_ackumulerad_kostnad' AND $timeFilter GROUP BY time(5s) fill(previous)",
           "rawQuery": true,
           "refId": "A"
         }
       ],
       "title": "Ackumulerad kostnad",
+      "timeFrom": "30d",
       "type": "timeseries"
     },
     {
