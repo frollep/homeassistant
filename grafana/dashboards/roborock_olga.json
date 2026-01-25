@@ -189,9 +189,18 @@
       },
       "id": 2,
       "options": {
-        "mergeValues": true,
-        "rowHeight": 0.9,
-        "showValue": "auto"
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
       },
       "targets": [
         {
@@ -203,7 +212,7 @@
         }
       ],
       "title": "Olga status",
-      "type": "state-timeline"
+      "type": "stat"
     },
     {
       "datasource": {
