@@ -75,8 +75,8 @@
       "targets": [
         {
           "format": "time_series",
-          "interval": "5s",
-          "query": "SELECT last(\"value\") FROM \"W\" WHERE \"entity_id\"='total_active_power_sum'",
+          "interval": "1s",
+          "query": "SELECT last(\"value\") FROM \"W\" WHERE \"entity_id\"='tibber_pulse_gnejsarn_effekt'",
           "rawQuery": true,
           "refId": "A"
         }
@@ -393,8 +393,8 @@
       "targets": [
         {
           "format": "time_series",
-          "interval": "5s",
-          "query": "SELECT mean(\"value\") FROM \"W\" WHERE \"entity_id\"='total_active_power_sum' AND $timeFilter GROUP BY time(5s) fill(previous)",
+          "interval": "1s",
+          "query": "SELECT mean(\"value\") FROM \"W\" WHERE \"entity_id\"='tibber_pulse_gnejsarn_effekt' AND $timeFilter GROUP BY time(5s) fill(previous)",
           "rawQuery": true,
           "refId": "A"
         }
@@ -5750,6 +5750,204 @@
       ],
       "title": "Aktuell effekt per fas (L1/L2/L3)",
       "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 60
+      },
+      "id": 201,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "interval": "1s"
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "1s",
+          "query": "SELECT mean(\"value\") FROM \"W\" WHERE \"entity_id\"='outdoor_smart_plug_effekt' AND $timeFilter GROUP BY time(1s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Motorv\u00e4rmare Uttag 1 - effekt",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 60
+      },
+      "id": 202,
+      "options": {
+        "drawStyle": "line",
+        "fillOpacity": 0,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "lineInterpolation": "linear",
+        "lineWidth": 2,
+        "showPoints": "never",
+        "spanNulls": true,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "interval": "1s"
+      },
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "1s",
+          "query": "SELECT mean(\"value\") FROM \"W\" WHERE \"entity_id\"='outdoor_smart_plug_2_effekt' AND $timeFilter GROUP BY time(1s) fill(previous)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Utebelysning Uttag 1 - effekt",
+      "type": "timeseries"
     }
   ],
   "refresh": "5s",
@@ -5767,6 +5965,6 @@
   "timezone": "browser",
   "title": "Tibber Energy & Pulse Peter",
   "uid": "f80bc7da-9685-4600-9ad7-b8b0f82ea1ff",
-  "version": 1,
+  "version": 6,
   "weekStart": ""
 }

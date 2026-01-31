@@ -42,12 +42,18 @@ influxdb:
       - sensor.olga_total_stadtid
       - sensor.olga_totalt_antal_stadningar
       - sensor.olga_totalt_stadad_area
+      - sensor.outdoor_smart_plug_effekt
+      - sensor.outdoor_smart_plug_2_effekt
+      - sensor.motorvarmare_energi_stabil
+      - sensor.utebelysning_energi_stabil
       - binary_sensor.olga_laddning
     entity_globs:
       - sensor.tibber*
       - sensor.b6559c39*
       - sensor.*tibber*
       - sensor.phase_*
+      - sensor.outdoor_smart_plug_*
+      - sensor.outdoor_smart_plug_2_*
       - sensor.dehumidifier_20l_*
       - sensor.ute_temp_*
       - sensor.overvoltage*
@@ -71,7 +77,47 @@ template:
           {{ state_attr('climate.matforradet', 'current_temperature') | float(0) }}
         device_class: temperature
         state_class: measurement
-  - sensor:
+  - trigger:
+      - platform: time_pattern
+        minutes: "/1"
+      - platform: state
+        entity_id: sensor.olga_status
+      - platform: state
+        entity_id:
+          - sensor.tibber_pulse_gnejsarn_spanning_fas1
+          - sensor.tibber_pulse_gnejsarn_spanning_fas2
+          - sensor.tibber_pulse_gnejsarn_spanning_fas3
+          - sensor.tibber_pulse_gnejsarn_strom_fas1
+          - sensor.tibber_pulse_gnejsarn_strom_fas2
+          - sensor.tibber_pulse_gnejsarn_strom_fas3
+    sensor:
+      - name: "Olga Status Code"
+        unique_id: olga_status_code
+        state_class: measurement
+        state: >-
+          {% set status = states('sensor.olga_status') | lower %}
+          {% if status == 'charging' %}
+            {% set code = 1 %}
+          {% elif status == 'docked' %}
+            {% set code = 2 %}
+          {% elif 'cleaning' in status or 'mopping' in status %}
+            {% set code = 3 %}
+          {% elif status == 'returning_home' or status == 'returning' or 'returning' in status %}
+            {% set code = 4 %}
+          {% elif status == 'paused' %}
+            {% set code = 5 %}
+          {% elif status == 'idle' %}
+            {% set code = 6 %}
+          {% elif status == 'device_offline' %}
+            {% set code = 97 %}
+          {% elif status == 'charging_problem' %}
+            {% set code = 98 %}
+          {% elif status == 'error' %}
+            {% set code = 99 %}
+          {% else %}
+            {% set code = 0 %}
+          {% endif %}
+          {{ (code + (now().minute / 1000)) | round(3) }}
       - name: "Tibber Phase Current Imbalance"
         unique_id: tibber_phase_current_imbalance
         unit_of_measurement: "A"
@@ -416,6 +462,25 @@ template:
         unique_id: olga_nuvarande_rum
         state: >-
           {{ state_attr('vacuum.olga', 'current_room') or 'unknown' }}
+  - sensor:
+      - name: "Motorvarmare energi stabil"
+        unique_id: motorvarmare_energi_stabil
+        unit_of_measurement: "kWh"
+        device_class: energy
+        state_class: total_increasing
+        state: >-
+          {% set current = states('sensor.outdoor_smart_plug_total_energi') | float(0) %}
+          {% set previous = this.state | float(0) %}
+          {{ [current, previous] | max }}
+      - name: "Utebelysning energi stabil"
+        unique_id: utebelysning_energi_stabil
+        unit_of_measurement: "kWh"
+        device_class: energy
+        state_class: total_increasing
+        state: >-
+          {% set current = states('sensor.outdoor_smart_plug_2_total_energi') | float(0) %}
+          {% set previous = this.state | float(0) %}
+          {{ [current, previous] | max }}
 automation: !include automations.yaml
 
 notify:
