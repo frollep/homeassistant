@@ -3,7 +3,7 @@
   "title": "Matforradet",
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 1,
+  "version": 14,
   "refresh": "30s",
   "time": {
     "from": "now-7d",
@@ -33,7 +33,7 @@
         "x": 0,
         "y": 0,
         "w": 6,
-        "h": 4
+        "h": 6
       },
       "datasource": {
         "type": "influxdb",
@@ -92,7 +92,7 @@
         "x": 6,
         "y": 0,
         "w": 6,
-        "h": 4
+        "h": 6
       },
       "datasource": {
         "type": "influxdb",
@@ -145,7 +145,7 @@
     },
     {
       "type": "timeseries",
-      "title": "Effekt over tid",
+      "title": "Effekt \u00f6ver tid",
       "gridPos": {
         "x": 12,
         "y": 0,
@@ -188,10 +188,10 @@
     },
     {
       "type": "timeseries",
-      "title": "Dagsforbrukning",
+      "title": "Dagsf\u00f6rbrukning \u00f6ver tid",
       "gridPos": {
-        "x": 0,
-        "y": 6,
+        "x": 12,
+        "y": 18,
         "w": 12,
         "h": 6
       },
@@ -230,10 +230,10 @@
       ]
     },
     {
-      "type": "timeseries",
-      "title": "Arsforbrukning",
+      "type": "stat",
+      "title": "\u00c5rsf\u00f6rbrukning",
       "gridPos": {
-        "x": 12,
+        "x": 0,
         "y": 6,
         "w": 12,
         "h": 6
@@ -244,37 +244,40 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "kWh"
-        }
+          "unit": "kWh",
+          "unitScale": true
+        },
+        "overrides": []
       },
       "options": {
-        "drawStyle": "line",
-        "lineInterpolation": "linear",
-        "lineWidth": 2,
-        "fillOpacity": 0,
-        "showPoints": "never",
-        "spanNulls": true,
-        "legend": {
-          "showLegend": true
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
       },
       "targets": [
         {
           "refId": "A",
           "format": "time_series",
           "rawQuery": true,
-          "query": "SELECT last(\"value\") FROM \"kWh\" WHERE \"entity_id\"='matforradet_arsforbrukning' AND $timeFilter GROUP BY time(1d) fill(previous)",
+          "query": "SELECT last(\"value\") FROM \"kWh\" WHERE \"entity_id\"='matforradet_arsforbrukning' AND time >= '2026-01-01T00:00:00Z' AND time < '2027-01-01T00:00:00Z'",
           "interval": "1d"
         }
       ]
     },
     {
       "type": "timeseries",
-      "title": "Temperatur",
+      "title": "Temperatur \u00f6ver tid",
       "gridPos": {
         "x": 0,
         "y": 12,
@@ -321,8 +324,8 @@
       "gridPos": {
         "x": 12,
         "y": 12,
-        "w": 6,
-        "h": 4
+        "w": 12,
+        "h": 6
       },
       "datasource": {
         "type": "influxdb",
@@ -375,34 +378,51 @@
       ]
     },
     {
-      "type": "table",
-      "title": "Temperatur (raw)",
+      "type": "stat",
+      "title": "Dagsf\u00f6rbrukning",
       "gridPos": {
-        "x": 18,
-        "y": 12,
-        "w": 6,
-        "h": 4
+        "x": 12,
+        "y": 6,
+        "w": 12,
+        "h": 6
       },
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb-ha"
       },
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "unit": "kWh",
+          "unitScale": true
+        },
         "overrides": []
       },
       "options": {
-        "showHeader": true
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
       },
       "targets": [
         {
           "refId": "A",
-          "format": "table",
+          "format": "time_series",
           "rawQuery": true,
-          "query": "SELECT last(\"value\") FROM \"C\" WHERE \"entity_id\"='matforradet_temperatur' AND $timeFilter",
-          "interval": "1m"
+          "query": "SELECT last(\"value\") FROM \"kWh\" WHERE \"entity_id\"='matforradet_dagsforbrukning' AND time > now() - 1d",
+          "interval": "1h"
         }
-      ]
+      ],
+      "id": 1
     }
   ],
   "templating": {

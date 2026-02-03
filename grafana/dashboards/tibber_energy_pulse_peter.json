@@ -203,7 +203,7 @@
         }
       ],
       "timeFrom": "now/M",
-      "title": "Elkostnad denna manad",
+      "title": "Elkostnad denna m\u00e5nad",
       "type": "stat"
     },
     {
@@ -301,7 +301,7 @@
           "refId": "A"
         }
       ],
-      "title": "Ackumulerad f\u00f6rbrukning",
+      "title": "Ackumulerad f\u00f6rbrukning \u00f6ver tid",
       "type": "timeseries"
     },
     {
@@ -366,10 +366,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "x": 0,
+        "y": 12,
         "w": 12,
-        "x": 12,
-        "y": 12
+        "h": 6
       },
       "id": 3,
       "options": {
@@ -5740,12 +5740,12 @@
       "pluginVersion": "10.3.5",
       "targets": [
         {
-          "alias": "$tag_entity_id",
           "format": "time_series",
           "interval": "5s",
-          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\" =~ /phase_power_l[123]/ GROUP BY \"entity_id\"",
+          "query": "SELECT mean(\"value\") FROM \"W\" WHERE \"entity_id\" =~ /phase_power_l[123]/ AND $timeFilter GROUP BY time(5s), \"entity_id\" fill(previous)",
           "rawQuery": true,
-          "refId": "A"
+          "refId": "A",
+          "alias": "$tag_entity_id"
         }
       ],
       "title": "Aktuell effekt per fas (L1/L2/L3)",
@@ -5948,6 +5948,68 @@
       ],
       "title": "Utebelysning Uttag 1 - effekt",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "kWh",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 203,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.5",
+      "targets": [
+        {
+          "format": "time_series",
+          "interval": "5s",
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE (\"entity_id\"='tibber_pulse_gnejsarn_ackumulerad_forbrukning' OR \"entity_id\"='b6559c39_44ef_401f_bc28_4d476a8b9728_energy_imported') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Dagens f\u00f6rbrukning hittills",
+      "type": "stat"
     }
   ],
   "refresh": "5s",
@@ -5965,6 +6027,6 @@
   "timezone": "browser",
   "title": "Tibber Energy & Pulse Peter",
   "uid": "f80bc7da-9685-4600-9ad7-b8b0f82ea1ff",
-  "version": 6,
+  "version": 15,
   "weekStart": ""
 }

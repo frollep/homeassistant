@@ -66,12 +66,12 @@
         {
           "format": "time_series",
           "interval": "1m",
-          "query": "SELECT last(\"value\") FROM \"°C\" WHERE \"entity_id\"='dehumidifier_20l_temperatur'",
+          "query": "SELECT last(\"value\") FROM \"\u00b0C\" WHERE \"entity_id\"='dehumidifier_20l_temperatur'",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Temp Tvattstuga",
+      "title": "Temp Tv\u00e4ttstuga",
       "type": "stat"
     },
     {
@@ -116,7 +116,7 @@
           "refId": "A"
         }
       ],
-      "title": "Luftfuktighet Tvattstuga",
+      "title": "Luftfuktighet Tv\u00e4ttstuga",
       "type": "stat"
     },
     {
@@ -155,12 +155,12 @@
           "alias": "$tag_entity_id",
           "format": "time_series",
           "interval": "1m",
-          "query": "SELECT mean(\"value\") FROM \"°C\" WHERE \"entity_id\"='dehumidifier_20l_temperatur' AND time > now() - 24h GROUP BY time(1m) fill(previous)",
+          "query": "SELECT mean(\"value\") FROM \"\u00b0C\" WHERE \"entity_id\"='dehumidifier_20l_temperatur' AND time > now() - 24h GROUP BY time(1m) fill(previous)",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Dehumidifier Temp Tvattstuga",
+      "title": "Temp Tv\u00e4ttstuga \u00f6ver tid",
       "type": "timeseries"
     },
     {
@@ -204,7 +204,7 @@
           "refId": "A"
         }
       ],
-      "title": "Dehumidifier Luftfuktighet Tvattstuga",
+      "title": "Luftfuktighet Tv\u00e4ttstuga \u00f6ver tid",
       "type": "timeseries"
     },
     {
@@ -242,12 +242,12 @@
         {
           "format": "time_series",
           "interval": "1m",
-          "query": "SELECT mean(\"value\") FROM \"°C\" WHERE \"entity_id\"='ute_temp_temperatur' AND time > now() - 24h GROUP BY time(1m) fill(previous)",
+          "query": "SELECT mean(\"value\") FROM \"\u00b0C\" WHERE \"entity_id\"='ute_temp_temperatur' AND time > now() - 24h GROUP BY time(1m) fill(previous)",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Ute Temp",
+      "title": "Ute Temp \u00f6ver tid",
       "type": "timeseries"
     },
     {
@@ -275,10 +275,10 @@
         }
       },
       "gridPos": {
-        "h": 4,
+        "x": 12,
+        "y": 0,
         "w": 6,
-        "x": 0,
-        "y": 28
+        "h": 4
       },
       "options": {
         "colorMode": "value",
@@ -300,7 +300,7 @@
         {
           "format": "time_series",
           "interval": "1m",
-          "query": "SELECT last(\"value\") FROM \"°C\" WHERE \"entity_id\"='ute_temp_temperatur'",
+          "query": "SELECT last(\"value\") FROM \"\u00b0C\" WHERE \"entity_id\"='ute_temp_temperatur'",
           "rawQuery": true,
           "refId": "A"
         }
@@ -320,10 +320,10 @@
         }
       },
       "gridPos": {
-        "h": 4,
+        "x": 18,
+        "y": 0,
         "w": 6,
-        "x": 6,
-        "y": 28
+        "h": 4
       },
       "options": {
         "colorMode": "value",
@@ -393,67 +393,8 @@
           "refId": "A"
         }
       ],
-      "title": "Ute Temp Luftfuktighet",
+      "title": "Ute Luftfuktighet \u00f6ver tid",
       "type": "timeseries"
-    },
-    {
-      "type": "stat",
-      "title": "Aktuell temperatur",
-      "gridPos": {
-        "x": 0,
-        "y": 40,
-        "w": 6,
-        "h": 4
-      },
-      "datasource": {
-        "type": "influxdb",
-        "uid": "influxdb-ha"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 10
-              }
-            ]
-          },
-          "unit": "celsius",
-          "unitScale": true
-        }
-      },
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true,
-        "orientation": "horizontal"
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "format": "time_series",
-          "rawQuery": true,
-          "query": "SELECT last(\"value\") AS \"value\" FROM \"C\" WHERE \"entity_id\"='matforradet_temperatur' AND $timeFilter",
-          "interval": "1m"
-        }
-      ]
     }
   ],
   "refresh": "30s",
@@ -468,5 +409,5 @@
   "timezone": "browser",
   "title": "Temperaturer och Luftfuktighet",
   "uid": "temperaturer-luftfuktighet",
-  "version": 13
+  "version": 19
 }
