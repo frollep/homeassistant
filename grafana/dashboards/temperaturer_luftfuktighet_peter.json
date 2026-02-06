@@ -76,7 +76,7 @@
         {
           "format": "time_series",
           "interval": "1m",
-          "query": "SELECT last(\"value\") FROM \"°C\" WHERE \"entity_id\"='dehumidifier_20l_temperatur'",
+          "query": "SELECT last(\"value\") FROM \"\u00b0C\" WHERE \"entity_id\"='dehumidifier_20l_temperatur'",
           "rawQuery": true,
           "refId": "A"
         }
@@ -202,7 +202,7 @@
         {
           "format": "time_series",
           "interval": "1m",
-          "query": "SELECT last(\"value\") FROM \"°C\" WHERE \"entity_id\"='ute_temp_temperatur'",
+          "query": "SELECT last(\"value\") FROM \"\u00b0C\" WHERE \"entity_id\"='ute_temp_temperatur'",
           "rawQuery": true,
           "refId": "A"
         }
@@ -365,7 +365,7 @@
           "alias": "$tag_entity_id",
           "format": "time_series",
           "interval": "1m",
-          "query": "SELECT mean(\"value\") FROM \"°C\" WHERE \"entity_id\"='dehumidifier_20l_temperatur' AND time > now() - 24h GROUP BY time(1m) fill(previous)",
+          "query": "SELECT mean(\"value\") FROM \"\u00b0C\" WHERE \"entity_id\"='dehumidifier_20l_temperatur' AND time > now() - 24h GROUP BY time(1m) fill(previous)",
           "rawQuery": true,
           "refId": "A"
         }
@@ -533,7 +533,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 12,
         "x": 0,
         "y": 24
@@ -561,7 +561,7 @@
         {
           "format": "time_series",
           "interval": "1m",
-          "query": "SELECT mean(\"value\") FROM \"°C\" WHERE \"entity_id\"='ute_temp_temperatur' AND time > now() - 24h GROUP BY time(1m) fill(previous)",
+          "query": "SELECT mean(\"value\") FROM \"\u00b0C\" WHERE \"entity_id\"='ute_temp_temperatur' AND time > now() - 24h GROUP BY time(1m) fill(previous)",
           "rawQuery": true,
           "refId": "A"
         }
@@ -630,7 +630,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 12,
         "x": 12,
         "y": 24
@@ -668,10 +668,10 @@
     },
     {
       "type": "stat",
-      "title": "Temp Matförråd Nu",
+      "title": "Temp Matf\u00f6rr\u00e5d Nu",
       "gridPos": {
-        "x": 0,
-        "y": 31,
+        "x": 12,
+        "y": 16,
         "w": 12,
         "h": 8
       },
@@ -725,6 +725,300 @@
         }
       ],
       "id": 9
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "20": {
+                  "text": "Low"
+                },
+                "50": {
+                  "text": "Medium"
+                },
+                "90": {
+                  "text": "Full"
+                },
+                "0": {
+                  "text": "Unknown"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": false
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.5",
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"%\" WHERE \"entity_id\"='ute_temp_batteri_procent' AND time > now() - 30d",
+          "interval": "1m"
+        }
+      ],
+      "title": "Ute temp batteri",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percent",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.5",
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"%\" WHERE \"entity_id\"='diskbank_koket_batteri' AND time > now() - 30d",
+          "interval": "1m"
+        }
+      ],
+      "title": "Diskbank k\u00f6ket batteri",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Ej fukt",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "Fukt uppm\u00e4tts",
+                  "color": "red"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.5",
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"binary_sensor.diskbank_koket_fukt\" WHERE time > now() - 30d",
+          "interval": "1m"
+        }
+      ],
+      "title": "Diskbank k\u00f6ket fukt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Uppl\u00e5st",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "L\u00e5st",
+                  "color": "green"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 12,
+        "h": 6
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.5",
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM \"count\" WHERE \"entity_id\"='ytterdorr_las_status' AND time > now() - 30d",
+          "interval": "1m"
+        }
+      ],
+      "title": "Ytterd\u00f6rr l\u00e5s",
+      "type": "stat"
     }
   ],
   "refresh": "30s",
@@ -742,6 +1036,6 @@
   "timezone": "browser",
   "title": "Temperaturer och Luftfuktighet Peter",
   "uid": "e38e5863-7dc6-4ea9-9b91-2ce3f87cb0f0",
-  "version": 5,
+  "version": 27,
   "weekStart": ""
 }

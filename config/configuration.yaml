@@ -34,6 +34,7 @@ influxdb:
     domains:
       - sensor
       - binary_sensor
+      - lock
     entities:
       - sensor.olga_batteri
       - sensor.olga_nuvarande_rum
@@ -44,6 +45,11 @@ influxdb:
       - sensor.olga_totalt_stadad_area
       - sensor.outdoor_smart_plug_effekt
       - sensor.outdoor_smart_plug_2_effekt
+      - sensor.olga_nuvarande_rum_kod
+      - sensor.ute_temp_batteristatus
+      - sensor.ute_temp_batteri_procent
+      - lock.ytterdorr
+      - sensor.ytterdorr_las_status
       - sensor.motorvarmare_energi_stabil
       - sensor.utebelysning_energi_stabil
       - binary_sensor.olga_laddning
@@ -462,6 +468,78 @@ template:
         unique_id: olga_nuvarande_rum
         state: >-
           {{ state_attr('vacuum.olga', 'current_room') or 'unknown' }}
+  - trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: sensor.olga_nuvarande_rum
+      - platform: time_pattern
+        minutes: "/1"
+    sensor:
+      - name: "Olga nuvarande rum kod"
+        unique_id: olga_nuvarande_rum_kod
+        state_class: measurement
+        unit_of_measurement: "count"
+        state: >-
+          {% set room = states('sensor.olga_nuvarande_rum') | lower %}
+          {% if room == 'trappen' %}
+            1
+          {% elif room == 'vardagsrummet' %}
+            2
+          {% elif room == 'kontoret' %}
+            3
+          {% elif room == 'hallen' %}
+            4
+          {% elif room == 'köket' or room == 'koket' %}
+            5
+          {% else %}
+            0
+          {% endif %}
+  - trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: sensor.ute_temp_batteristatus
+      - platform: time_pattern
+        minutes: "/15"
+    sensor:
+      - name: "Ute temp batteri procent"
+        unique_id: ute_temp_batteri_procent
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+        state: >-
+          {% set raw = states('sensor.ute_temp_batteristatus') | lower %}
+          {% if raw in ['high', 'hög', 'hog'] %}
+            90
+          {% elif raw in ['medium', 'middle', 'medel'] %}
+            50
+          {% elif raw in ['low', 'låg', 'lag'] %}
+            20
+          {% else %}
+            0
+          {% endif %}
+  - trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: lock.ytterdorr
+      - platform: time_pattern
+        minutes: "/1"
+    sensor:
+      - name: "Ytterdörr lås status"
+        unique_id: ytterdorr_las_status
+        unit_of_measurement: "count"
+        state_class: measurement
+        state: >-
+          {% set s = states('lock.ytterdorr') | lower %}
+          {% if s == 'locked' %}
+            1
+          {% elif s == 'unlocked' %}
+            0
+          {% else %}
+            0
+          {% endif %}
   - sensor:
       - name: "Motorvarmare energi stabil"
         unique_id: motorvarmare_energi_stabil
