@@ -1,5 +1,8 @@
 default_config:
 
+homeassistant:
+  time_zone: Europe/Stockholm
+
 http:
   use_x_forwarded_for: true
   trusted_proxies:
@@ -560,6 +563,10 @@ template:
           {% set previous = this.state | float(0) %}
           {{ [current, previous] | max }}
 automation: !include automations.yaml
+
+input_text:
+  motorvarmare_start_info:
+    name: "Motorvarmare start info"
 
 notify:
   - platform: smtp

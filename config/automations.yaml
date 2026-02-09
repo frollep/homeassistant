@@ -70,3 +70,300 @@
               data:
                 title: "Matforradet temperatur"
                 message: "Temperaturen ar fortfarande under 5C ({{ state_attr('climate.matforradet', 'current_temperature') }}C)."
+- id: ytterdorr_upplast_larm_mobil
+  alias: "Ytterdorr upplast larm (mobil)"
+  description: "Mobilnotis vid 15s, 1 min och 3 min olast."
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: lock.ytterdorr
+      to: "unlocked"
+  action:
+    - delay: "00:00:15"
+    - condition: state
+      entity_id: lock.ytterdorr
+      state: "unlocked"
+    - service: notify.mobile_app_peters_11
+      data:
+        title: "Ytterdorr upplast"
+        message: "Ytterdorr ar upplast i minst 15 sek."
+    - delay: "00:00:45"
+    - condition: state
+      entity_id: lock.ytterdorr
+      state: "unlocked"
+    - service: notify.mobile_app_peters_11
+      data:
+        title: "Ytterdorr upplast"
+        message: "Ytterdorr ar upplast i minst 1 minut."
+    - delay: "00:02:00"
+    - condition: state
+      entity_id: lock.ytterdorr
+      state: "unlocked"
+    - service: notify.mobile_app_peters_11
+      data:
+        title: "Ytterdorr fortfarande upplast"
+        message: "Ytterdorr ar fortfarande upplast, lasa via appen."
+- id: ytterdorr_upplast_larm_mail
+  alias: "Ytterdorr upplast larm (mail)"
+  description: "Mail vid 30s, 2 min, 5 min och 6 min olast."
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: lock.ytterdorr
+      to: "unlocked"
+  action:
+    - delay: "00:00:30"
+    - condition: state
+      entity_id: lock.ytterdorr
+      state: "unlocked"
+    - service: notify.gmail
+      data:
+        title: "Ytterdorr upplast"
+        message: "Ytterdorr ar upplast i minst 30 sek."
+    - delay: "00:01:30"
+    - condition: state
+      entity_id: lock.ytterdorr
+      state: "unlocked"
+    - service: notify.gmail
+      data:
+        title: "Ytterdorr upplast"
+        message: "Ytterdorr ar upplast i minst 2 minuter."
+    - delay: "00:03:00"
+    - condition: state
+      entity_id: lock.ytterdorr
+      state: "unlocked"
+    - service: notify.gmail
+      data:
+        title: "Ytterdorr upplast"
+        message: "Ytterdorr ar upplast i minst 5 minuter."
+    - delay: "00:01:00"
+    - condition: state
+      entity_id: lock.ytterdorr
+      state: "unlocked"
+    - service: notify.gmail
+      data:
+        title: "Ytterdorr fortfarande upplast"
+        message: "Ytterdorr ar fortfarande upplast, lasa via appen."
+- id: motorvarmare_start_veckodagar
+  alias: "Motorvarmare start vardagar 07:00"
+  description: "Starta motorvarmare vardagar baserat pa utetemperatur."
+  trigger:
+    - platform: time
+      at: "04:00:00"
+    - platform: time
+      at: "04:30:00"
+    - platform: time
+      at: "05:30:00"
+    - platform: time
+      at: "06:00:00"
+    - platform: time
+      at: "06:30:00"
+  condition:
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+  action:
+    - service: notify.mobile_app_peters_11
+      data:
+        title: "Motorvarmare kontroll"
+        message: >
+          Kontroll {{ trigger.now.strftime('%H:%M') }}.
+          Temp: {{ states('sensor.ute_temp_temperatur') }} C.
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ trigger.now.strftime('%H:%M') == '04:00' and
+                   (states('sensor.ute_temp_temperatur') | float(999) <= -20) and
+                   (states('sensor.ute_temp_temperatur') | float(999) > -35) }}
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.outdoor_smart_plug_uttag_1
+            - service: input_text.set_value
+              data:
+                entity_id: input_text.motorvarmare_start_info
+                value: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+            - service: notify.mobile_app_peters_11
+              data:
+                title: "Motorvarmare startad"
+                message: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ trigger.now.strftime('%H:%M') == '04:30' and
+                   (states('sensor.ute_temp_temperatur') | float(999) > -20) and
+                   (states('sensor.ute_temp_temperatur') | float(999) <= -15) }}
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.outdoor_smart_plug_uttag_1
+            - service: input_text.set_value
+              data:
+                entity_id: input_text.motorvarmare_start_info
+                value: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+            - service: notify.mobile_app_peters_11
+              data:
+                title: "Motorvarmare startad"
+                message: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ trigger.now.strftime('%H:%M') == '05:30' and
+                   (states('sensor.ute_temp_temperatur') | float(999) > -15) and
+                   (states('sensor.ute_temp_temperatur') | float(999) <= -5) }}
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.outdoor_smart_plug_uttag_1
+            - service: input_text.set_value
+              data:
+                entity_id: input_text.motorvarmare_start_info
+                value: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+            - service: notify.mobile_app_peters_11
+              data:
+                title: "Motorvarmare startad"
+                message: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ trigger.now.strftime('%H:%M') == '06:00' and
+                   (states('sensor.ute_temp_temperatur') | float(999) > -10) and
+                   (states('sensor.ute_temp_temperatur') | float(999) <= -5) }}
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.outdoor_smart_plug_uttag_1
+            - service: input_text.set_value
+              data:
+                entity_id: input_text.motorvarmare_start_info
+                value: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+            - service: notify.mobile_app_peters_11
+              data:
+                title: "Motorvarmare startad"
+                message: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ trigger.now.strftime('%H:%M') == '06:30' and
+                   (states('sensor.ute_temp_temperatur') | float(999) > -5) and
+                   (states('sensor.ute_temp_temperatur') | float(999) <= 5) }}
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.outdoor_smart_plug_uttag_1
+            - service: input_text.set_value
+              data:
+                entity_id: input_text.motorvarmare_start_info
+                value: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+            - service: notify.mobile_app_peters_11
+              data:
+                title: "Motorvarmare startad"
+                message: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+      default: []
+- id: motorvarmare_notis_0610
+  alias: "Motorvarmare notis 06:10"
+  description: "Notis kl 06:10 med starttid och temperatur."
+  trigger:
+    - platform: time
+      at: "06:10:00"
+  condition:
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+  action:
+    - service: notify.mobile_app_peters_11
+      data:
+        title: "Motorvarmare"
+        message: >
+          {{ states('input_text.motorvarmare_start_info') }}
+- id: motorvarmare_start_sondag_test
+  alias: "Motorvarmare start sondag 09:30 (test)"
+  description: "Starta motorvarmare sondag baserat pa utetemperatur."
+  trigger:
+    - platform: time
+      at: "08:30:00"
+    - platform: time
+      at: "09:00:00"
+  condition:
+    - condition: time
+      weekday:
+        - sun
+  action:
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ trigger.now.strftime('%H:%M') == '08:30' and
+                   states('sensor.ute_temp_temperatur') | float(999) <= -10 }}
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.outdoor_smart_plug_uttag_1
+            - service: input_text.set_value
+              data:
+                entity_id: input_text.motorvarmare_start_info
+                value: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ trigger.now.strftime('%H:%M') == '09:00' and
+                   (states('sensor.ute_temp_temperatur') | float(999) > -10) and
+                   (states('sensor.ute_temp_temperatur') | float(999) <= -5) }}
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.outdoor_smart_plug_uttag_1
+            - service: input_text.set_value
+              data:
+                entity_id: input_text.motorvarmare_start_info
+                value: >
+                  Start: {{ trigger.now.strftime('%H:%M') }},
+                  Temp: {{ states('sensor.ute_temp_temperatur') }} C
+      default: []
+- id: motorvarmare_notis_0915_sondag
+  alias: "Motorvarmare notis 09:15 (sondag)"
+  description: "Notis kl 09:15 med starttid och temperatur."
+  trigger:
+    - platform: time
+      at: "09:15:00"
+  condition:
+    - condition: time
+      weekday:
+        - sun
+  action:
+    - service: notify.mobile_app_peters_11
+      data:
+        title: "Motorvarmare"
+        message: >
+          {{ states('input_text.motorvarmare_start_info') }}

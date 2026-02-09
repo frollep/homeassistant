@@ -823,6 +823,558 @@
       ],
       "title": "Olga totalt st\u00e4dad area senda start",
       "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "displayMode": "color-text"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 0,
+                "to": 0.999,
+                "result": {
+                  "color": "gray",
+                  "index": 0,
+                  "text": "Unknown"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 1,
+                "to": 1.999,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "Charging"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 2,
+                "to": 2.999,
+                "result": {
+                  "color": "green",
+                  "index": 2,
+                  "text": "Docked"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 3,
+                "to": 3.999,
+                "result": {
+                  "color": "green",
+                  "index": 3,
+                  "text": "Cleaning"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 4,
+                "to": 4.999,
+                "result": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Returning"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 5,
+                "to": 5.999,
+                "result": {
+                  "color": "yellow",
+                  "index": 5,
+                  "text": "Paused"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 6,
+                "to": 6.999,
+                "result": {
+                  "color": "gray",
+                  "index": 6,
+                  "text": "Idle"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 97,
+                "to": 97.999,
+                "result": {
+                  "color": "red",
+                  "index": 97,
+                  "text": "Offline"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 98,
+                "to": 98.999,
+                "result": {
+                  "color": "red",
+                  "index": 98,
+                  "text": "Charging problem"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 99,
+                "to": 99.999,
+                "result": {
+                  "color": "red",
+                  "index": 99,
+                  "text": "Error"
+                }
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": false,
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 25,
+        "w": 12,
+        "h": 5
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='olga_filtertid_kvar' AND time > now() - 30d",
+          "interval": "1m"
+        }
+      ],
+      "timeFrom": null,
+      "title": "Olga filtertid kvar (timmar kvar)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "displayMode": "color-text"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 0,
+                "to": 0.999,
+                "result": {
+                  "color": "gray",
+                  "index": 0,
+                  "text": "Unknown"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 1,
+                "to": 1.999,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "Charging"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 2,
+                "to": 2.999,
+                "result": {
+                  "color": "green",
+                  "index": 2,
+                  "text": "Docked"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 3,
+                "to": 3.999,
+                "result": {
+                  "color": "green",
+                  "index": 3,
+                  "text": "Cleaning"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 4,
+                "to": 4.999,
+                "result": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Returning"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 5,
+                "to": 5.999,
+                "result": {
+                  "color": "yellow",
+                  "index": 5,
+                  "text": "Paused"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 6,
+                "to": 6.999,
+                "result": {
+                  "color": "gray",
+                  "index": 6,
+                  "text": "Idle"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 97,
+                "to": 97.999,
+                "result": {
+                  "color": "red",
+                  "index": 97,
+                  "text": "Offline"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 98,
+                "to": 98.999,
+                "result": {
+                  "color": "red",
+                  "index": 98,
+                  "text": "Charging problem"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 99,
+                "to": 99.999,
+                "result": {
+                  "color": "red",
+                  "index": 99,
+                  "text": "Error"
+                }
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": false,
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 30,
+        "w": 12,
+        "h": 5
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='olga_huvudborste_tid_kvar' AND time > now() - 30d",
+          "interval": "1m"
+        }
+      ],
+      "timeFrom": null,
+      "title": "Olga huvudborste tid kvar (timmar kvar)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-ha"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "displayMode": "color-text"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 0,
+                "to": 0.999,
+                "result": {
+                  "color": "gray",
+                  "index": 0,
+                  "text": "Unknown"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 1,
+                "to": 1.999,
+                "result": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "Charging"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 2,
+                "to": 2.999,
+                "result": {
+                  "color": "green",
+                  "index": 2,
+                  "text": "Docked"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 3,
+                "to": 3.999,
+                "result": {
+                  "color": "green",
+                  "index": 3,
+                  "text": "Cleaning"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 4,
+                "to": 4.999,
+                "result": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Returning"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 5,
+                "to": 5.999,
+                "result": {
+                  "color": "yellow",
+                  "index": 5,
+                  "text": "Paused"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 6,
+                "to": 6.999,
+                "result": {
+                  "color": "gray",
+                  "index": 6,
+                  "text": "Idle"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 97,
+                "to": 97.999,
+                "result": {
+                  "color": "red",
+                  "index": 97,
+                  "text": "Offline"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 98,
+                "to": 98.999,
+                "result": {
+                  "color": "red",
+                  "index": 98,
+                  "text": "Charging problem"
+                }
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 99,
+                "to": 99.999,
+                "result": {
+                  "color": "red",
+                  "index": 99,
+                  "text": "Error"
+                }
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none",
+          "unitScale": false,
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 35,
+        "w": 12,
+        "h": 5
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "query": "SELECT last(\"value\") FROM /.*/ WHERE \"entity_id\"='olga_sidoborste_tid_kvar' AND time > now() - 30d",
+          "interval": "1m"
+        }
+      ],
+      "timeFrom": null,
+      "title": "Olga sidoborste tid kvar (timmar kvar)",
+      "type": "stat"
     }
   ],
   "refresh": "30s",
@@ -840,6 +1392,6 @@
   "timezone": "browser",
   "title": "Roborock Olga",
   "uid": "7eeec0d5-aad7-4f40-9032-66f0c514b6d6",
-  "version": 12,
+  "version": 19,
   "weekStart": ""
 }
