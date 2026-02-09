@@ -14,6 +14,21 @@ Minimal base repo for running Home Assistant via Docker Desktop in WSL2 with tra
 
 Home Assistant UI: http://localhost:8123
 
+## Backup (recommended)
+Git only tracks the config files in this repo. For a full restore after reinstall,
+also back up secrets and Home Assistant storage/state.
+
+Backup command:
+```bash
+tar -czf ha_backup_$(date +%Y%m%d).tar.gz \
+  .env config/.storage config/secrets.yaml config/home-assistant_v2.db
+```
+
+Restore:
+1) Clone the repo and restore `.env`
+2) Extract the backup in the repo root
+3) Start: `docker compose up -d`
+
 ## Tibber Pulse probe (fields & per-phase check)
 - Install deps (one-time): `pip install requests websocket-client`
 - Copy env template: `cp .env.example .env` and set `TIBBER_TOKEN`.
