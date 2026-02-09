@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+stamp="$(date +%Y%m%d_%H%M%S)"
+backup_file="${repo_root}/ha_backup_${stamp}.tar.gz"
+
+cd "$repo_root"
+
+items=(
+  ".env"
+  "config/.storage"
+  "config/secrets.yaml"
+  "config/home-assistant_v2.db"
+)
+
+missing=()
+for item in "${items[@]}"; do
+  if [[ ! -e "$item" ]]; then
+    missing+=("$item")
+  fi
+done
+
+if (( ${#missing[@]} > 0 )); then
+  echo "Missing items: ${missing[*]}" >&2
+  exit 1
+fi
+
+tar -czf "$backup_file" "${items[@]}"
+echo "Backup created: $backup_file"

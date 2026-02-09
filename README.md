@@ -24,6 +24,11 @@ tar -czf ha_backup_$(date +%Y%m%d).tar.gz \
   .env config/.storage config/secrets.yaml config/home-assistant_v2.db
 ```
 
+Quick backup script:
+```bash
+./backup_local_HA
+```
+
 Restore:
 1) Clone the repo and restore `.env`
 2) Extract the backup in the repo root
